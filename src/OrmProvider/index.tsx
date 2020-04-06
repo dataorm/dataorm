@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { Database } from '../Database/DB';
+import { Persistance } from '../Storage/Persistance';
 
 const OrmContext = createContext({});
 
@@ -10,12 +11,21 @@ export const OrmProvider = ({ children }: any) => {
     throw new Error('You might forget to initialize database');
   }
 
-  console.log(db, 'db');
+  const persisted = Persistance.get();
 
-  const [context, setContext] = useState(db.state);
+  const [context, setContext] = useState(
+    persisted ? JSON.parse(persisted) : db.state
+  );
 
   useEffect(() => {
-    db.setDispatch(setContext);
+    Persistance.persist();
+
+    const setDispatch = (data: any) => {
+      setContext(data);
+      db.fire(context);
+    };
+
+    db.setDispatch(setDispatch);
   }, [db]);
 
   db.setState(context);

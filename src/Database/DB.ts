@@ -1,6 +1,7 @@
+import { Subject } from '../Observer/Subject';
 import { DbConfig } from './types';
 
-class Database {
+class Database extends Subject {
   static instance: Database;
 
   initialized: boolean = false;
