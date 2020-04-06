@@ -5,8 +5,6 @@ export function App() {
   const [name, setName] = React.useState('');
 
   const allUsers = User.get();
-  const firstUser = User.first();
-  const findUser = User.find(2);
 
   return (
     <div>
@@ -21,9 +19,17 @@ export function App() {
         <button type="submit">add</button>
       </form>
 
-      <pre>All {JSON.stringify(allUsers)}</pre>
-      <pre>First {JSON.stringify(firstUser)}</pre>
-      <pre>Find {JSON.stringify(findUser)}</pre>
+      <div>
+        {allUsers.map((user: any) => {
+          return (
+            <div key={user.name}>
+              <div onClick={() => User.update({ id: 1, name: 'jayesh' })}>
+                {user.name}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

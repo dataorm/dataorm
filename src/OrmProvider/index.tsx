@@ -16,32 +16,35 @@ export const OrmProvider = ({ children }: any) => {
 
   const persisted = Persistance.get();
 
-  const [context, setContext] = useState(
-    persisted ? JSON.parse(persisted) : db.state
-  );
+  const persistedData = persisted ? JSON.parse(persisted) : db.state;
+
+  const [context, setContext]: any = useState(persistedData);
 
   db.setState(context);
 
-  useEffect(() => {
-    db.subscribe((data: any) => {
-      Persistance.persist(data);
-    });
-  }, []);
+  db.setGetters(({ type, payload }: Action) => {
+    const query: any = new Query();
+    const results = query[type]({ type, payload });
+
+    return results;
+  });
 
   useEffect(() => {
     db.setDispatch(({ type, payload }: Action) => {
       const mutation: any = new Mutation(setContext);
-      mutation[type](payload);
-      db.fire(context);
+      const results = mutation[type]({ type, payload });
+
+      return results;
     });
   }, [db]);
 
   useEffect(() => {
-    db.setGetters(({ type, payload }: Action) => {
-      const query: any = new Query();
-      query[type](payload);
+    db.subscribe((data: any) => {
+      console.log(data, 'data');
+
+      Persistance.persist(data);
     });
-  }, [db]);
+  }, []);
 
   return (
     <OrmContext.Provider value={{ context, setContext }}>

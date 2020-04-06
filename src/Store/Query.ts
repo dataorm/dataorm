@@ -1,14 +1,32 @@
+import { Database } from '../Database/DB';
+import { Action } from '../Database/types';
+
 class Query {
-  first() {
-    console.log('first');
+  private db: Database = Database.getInstance();
+
+  collection(entity: string) {
+    return this.db.state[this.db.dbConfig.name][entity];
   }
 
-  find(id: any) {
-    console.log(id);
+  first({ payload }: Action) {
+    const entities: any[] = this.collection(payload.model.entity);
+    const first = entities.length ? entities[0] : null;
+
+    return first;
   }
 
-  get() {
-    console.log('get');
+  find({ payload }: Action) {
+    const entities: any[] = this.collection(payload.model.entity);
+    const find = entities.find((e) => e.id === payload.data.id);
+    const findById = find ? find : null;
+
+    return findById;
+  }
+
+  get({ payload }: Action) {
+    const entities: any[] = this.collection(payload.model.entity);
+
+    return entities;
   }
 }
 

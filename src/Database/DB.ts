@@ -31,8 +31,8 @@ class Database extends Subject {
     this.state = state;
   }
 
-  setGetters(getters: (action: Action) => any) {
-    this.getState = getters;
+  setGetters(getState: (action: Action) => any) {
+    this.getState = getState;
   }
 
   setDispatch(dispatch: (action: Action) => any) {
