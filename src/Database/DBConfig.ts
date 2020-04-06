@@ -38,14 +38,15 @@ class DBConfig {
   }
 
   private createModelBinding(model: any): any {
-    Object.defineProperty(model, 'store', {
-      value: this,
+    const entity = model.entity ?? snakeCase(Pluralize.plural(model.name));
+
+    Object.defineProperties(model, {
+      entity: { value: entity },
+      store: { value: this },
     });
 
-    const instance = new model();
-
     return {
-      entity: instance.entity ?? snakeCase(Pluralize.plural(model.name)),
+      entity,
       model,
     };
   }

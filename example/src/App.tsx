@@ -4,7 +4,9 @@ import { User } from './models/User';
 export function App() {
   const [name, setName] = React.useState('');
 
-  const users = User.get();
+  const allUsers = User.get();
+  const firstUser = User.first();
+  const findUser = User.find(2);
 
   return (
     <div>
@@ -19,7 +21,9 @@ export function App() {
         <button type="submit">add</button>
       </form>
 
-      <pre>{JSON.stringify(users)}</pre>
+      <pre>All {JSON.stringify(allUsers)}</pre>
+      <pre>First {JSON.stringify(firstUser)}</pre>
+      <pre>Find {JSON.stringify(findUser)}</pre>
     </div>
   );
 }

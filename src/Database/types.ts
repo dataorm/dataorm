@@ -12,3 +12,8 @@ export interface DbConfigOptions {
   name?: string;
   storage?: keyof StorageAdapter;
 }
+
+export interface Action {
+  type: string;
+  payload: { model: any; data?: any };
+}

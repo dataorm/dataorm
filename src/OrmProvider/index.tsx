@@ -1,6 +1,9 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { Database } from '../Database/DB';
+import { Action } from '../Database/types';
 import { Persistance } from '../Storage/Persistance';
+import { Mutation } from '../Store/Mutation';
+import { Query } from '../Store/Query';
 
 const OrmContext = createContext({});
 
@@ -17,18 +20,28 @@ export const OrmProvider = ({ children }: any) => {
     persisted ? JSON.parse(persisted) : db.state
   );
 
+  db.setState(context);
+
   useEffect(() => {
-    Persistance.persist();
+    db.subscribe((data: any) => {
+      Persistance.persist(data);
+    });
+  }, []);
 
-    const setDispatch = (data: any) => {
-      setContext(data);
+  useEffect(() => {
+    db.setDispatch(({ type, payload }: Action) => {
+      const mutation: any = new Mutation(setContext);
+      mutation[type](payload);
       db.fire(context);
-    };
-
-    db.setDispatch(setDispatch);
+    });
   }, [db]);
 
-  db.setState(context);
+  useEffect(() => {
+    db.setGetters(({ type, payload }: Action) => {
+      const query: any = new Query();
+      query[type](payload);
+    });
+  }, [db]);
 
   return (
     <OrmContext.Provider value={{ context, setContext }}>

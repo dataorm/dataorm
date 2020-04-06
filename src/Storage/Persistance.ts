@@ -3,12 +3,10 @@ import { Database } from '../Database/DB';
 class Persistance {
   private static db: Database = Database.getInstance();
 
-  static persist() {
-    this.db.subscribe((data: any) => {
-      if (this.db.dbConfig.storage === 'LocalStorage') {
-        localStorage.setItem('root', JSON.stringify(data));
-      }
-    });
+  static persist(data: any) {
+    if (this.db.dbConfig.storage === 'LocalStorage') {
+      localStorage.setItem('root', JSON.stringify(data));
+    }
   }
 
   static get() {

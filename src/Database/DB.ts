@@ -1,5 +1,5 @@
 import { Subject } from '../Observer/Subject';
-import { DbConfig } from './types';
+import { DbConfig, Action } from './types';
 
 class Database extends Subject {
   static instance: Database;
@@ -15,7 +15,9 @@ class Database extends Subject {
 
   state: any = {};
 
-  dispatch: any;
+  getState: (action: Action) => any = () => {};
+
+  dispatch: (action: Action) => any = () => {};
 
   static getInstance() {
     if (!this.instance) {
@@ -25,12 +27,16 @@ class Database extends Subject {
     return this.instance;
   }
 
-  setDispatch(dispatch: Function) {
-    this.dispatch = dispatch;
-  }
-
   setState(state: any) {
     this.state = state;
+  }
+
+  setGetters(getters: (action: Action) => any) {
+    this.getState = getters;
+  }
+
+  setDispatch(dispatch: (action: Action) => any) {
+    this.dispatch = dispatch;
   }
 }
 
