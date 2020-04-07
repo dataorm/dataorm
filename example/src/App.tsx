@@ -9,13 +9,13 @@ export function App() {
   return (
     <div>
       <form
-        onSubmit={(e) => {
+        onSubmit={e => {
           e.preventDefault();
           User.create({ name });
           setName('');
         }}
       >
-        <input value={name} onChange={(e) => setName(e.target.value)} />
+        <input value={name} onChange={e => setName(e.target.value)} />
         <button type="submit">add</button>
       </form>
 
@@ -23,8 +23,14 @@ export function App() {
         {allUsers.map((user: any) => {
           return (
             <div key={user.name}>
-              <div onClick={() => User.update({ id: 1, name: 'jayesh' })}>
-                {user.name}
+              <div
+                style={{ display: 'flex', flexDirection: 'row' }}
+                key={user.id}
+              >
+                <div>{user.name}</div>
+                <div>
+                  <button onClick={() => User.delete(user.id)}>delete</button>
+                </div>
               </div>
             </div>
           );

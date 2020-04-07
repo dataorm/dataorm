@@ -1,5 +1,14 @@
 {
   "include": ["src", "types"],
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest",
+    "src/setupTests.ts"
+  ],
   "compilerOptions": {
     "module": "esnext",
     "target": "ES6",

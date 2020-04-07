@@ -40,15 +40,13 @@ export const OrmProvider = ({ children }: any) => {
 
   useEffect(() => {
     db.subscribe((data: any) => {
-      console.log(data, 'data');
-
       Persistance.persist(data);
     });
   }, []);
 
   return (
     <OrmContext.Provider value={{ context, setContext }}>
-      {children}
+      {children.type()}
     </OrmContext.Provider>
   );
 };
