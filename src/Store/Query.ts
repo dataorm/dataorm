@@ -1,5 +1,6 @@
 import { Database } from '../Database/DB';
 import { Action } from '../Database/types';
+import { ModelNotFound } from '../Exceptions/ModelNotFound';
 
 class Query {
   private db: Database = Database.getInstance();
@@ -15,9 +16,19 @@ class Query {
     return first;
   }
 
+  firstOrFail({ type, payload }: Action) {
+    const first = this.first({ type, payload });
+
+    if (first) {
+      return first;
+    }
+
+    throw new ModelNotFound('Oops! Record does not exists in database');
+  }
+
   find({ payload }: Action) {
     const entities: any[] = this.collection(payload.model.entity);
-    const find = entities.find((e) => e.id === payload.data.id);
+    const find = entities.find(e => e.id === payload.data.id);
     const findById = find ? find : null;
 
     return findById;

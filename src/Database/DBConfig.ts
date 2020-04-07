@@ -1,6 +1,6 @@
 import { snakeCase } from 'change-case';
 import Pluralize from 'pluralize';
-import { Model } from '../Model';
+import { Model } from '../Model/Model';
 import { Database } from './DB';
 import { DbConfigOptions } from './types';
 

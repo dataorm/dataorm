@@ -6,6 +6,13 @@ export function App() {
 
   const allUsers = User.get();
 
+  try {
+    const findUserById = User.firstOrFail();
+    console.log(findUserById);
+  } catch (error) {
+    console.log(error);
+  }
+
   return (
     <div>
       <form
