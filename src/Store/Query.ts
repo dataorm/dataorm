@@ -1,12 +1,18 @@
 import { Database } from '../Database/DB';
 import { Action } from '../Database/types';
 import { ModelNotFound } from '../Exceptions/ModelNotFound';
+import { QueryBuilder } from '../Model/QueryBuilder';
+import { DB } from '../Database/DBConfig';
 
 class Query {
   private db: Database = Database.getInstance();
 
   collection(entity: string) {
-    return this.db.state[this.db.dbConfig.name][entity];
+    return this.db.state[DB.dbConfig.name][entity];
+  }
+
+  query({ payload }: Action) {
+    return new QueryBuilder(payload.model);
   }
 
   first({ payload }: Action) {

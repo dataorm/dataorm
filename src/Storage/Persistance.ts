@@ -1,10 +1,8 @@
-import { Database } from '../Database/DB';
+import { DB } from '../Database/DBConfig';
 
 class Persistance {
-  private static db: Database = Database.getInstance();
-
   static persist(data: any) {
-    if (this.db.dbConfig.storage === 'LocalStorage') {
+    if (DB.dbConfig.storage === 'LocalStorage') {
       localStorage.setItem('root', JSON.stringify(data));
     }
   }

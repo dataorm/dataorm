@@ -1,6 +1,10 @@
+import { Boolean } from './Boolean';
+import { Datetime } from './Datetime';
 import { Increment } from './Increment';
-import { Uuid } from './Uuid';
+import { Json } from './Json';
+import { Number } from './Number';
 import { String } from './String';
+import { Uuid } from './Uuid';
 
 export class Attributes {
   private model: any;
@@ -19,5 +23,21 @@ export class Attributes {
 
   public string() {
     return String.make(this.model);
+  }
+
+  public json() {
+    return Json.make(this.model);
+  }
+
+  public number() {
+    return Number.make(this.model);
+  }
+
+  public boolean() {
+    return Boolean.make(this.model);
+  }
+
+  public datetime() {
+    return Datetime.make(this.model);
   }
 }

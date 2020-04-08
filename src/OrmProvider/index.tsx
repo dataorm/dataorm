@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { Database } from '../Database/DB';
+import { DB } from '../Database/DBConfig';
 import { Action } from '../Database/types';
 import { Persistance } from '../Storage/Persistance';
 import { Mutation } from '../Store/Mutation';
@@ -10,7 +11,7 @@ const OrmContext = createContext({});
 export const OrmProvider = ({ children }: any) => {
   const db: Database = Database.getInstance();
 
-  if (!db.initialized) {
+  if (!DB.initialized) {
     throw new Error('You might forget to initialize database');
   }
 
@@ -46,7 +47,9 @@ export const OrmProvider = ({ children }: any) => {
 
   return (
     <OrmContext.Provider value={{ context, setContext }}>
-      {children.type()}
+      {children.type.hasOwnProperty('type')
+        ? children.type.type()
+        : children.type()}
     </OrmContext.Provider>
   );
 };

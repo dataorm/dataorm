@@ -2,15 +2,24 @@ import { snakeCase } from 'change-case';
 import Pluralize from 'pluralize';
 import { Model } from '../Model/Model';
 import { Database } from './DB';
-import { DbConfigOptions } from './types';
+import { DbConfig, DbConfigOptions } from './types';
 
 class DBConfig {
+  static instance: DBConfig;
+
   private db: Database = Database.getInstance();
 
-  private generateConfig(config: any) {
-    const newConfig: any = this.db.dbConfig;
+  dbConfig: DbConfig = {
+    name: 'db',
+    storage: 'LocalStorage',
+  };
 
-    Object.keys(this.db.dbConfig).forEach((key: string) => {
+  initialized: boolean = false;
+
+  private generateConfig(config: any) {
+    const newConfig: any = this.dbConfig;
+
+    Object.keys(this.dbConfig).forEach((key: string) => {
       newConfig[key] = config[key];
     });
 
@@ -18,10 +27,10 @@ class DBConfig {
   }
 
   private setStore(dbConfig: DbConfigOptions) {
-    this.db.dbConfig = this.generateConfig(dbConfig);
+    this.dbConfig = this.generateConfig(dbConfig);
 
     this.db.state = {
-      [this.db.dbConfig.name]: {},
+      [this.dbConfig.name]: {},
     };
   }
 
@@ -52,8 +61,8 @@ class DBConfig {
   }
 
   private registerSchema(model: any): void {
-    if (!this.db.state[this.db.dbConfig.name].hasOwnProperty(model.entity)) {
-      this.db.state[this.db.dbConfig.name][model.entity] = [];
+    if (!this.db.state[this.dbConfig.name].hasOwnProperty(model.entity)) {
+      this.db.state[this.dbConfig.name][model.entity] = [];
     }
   }
 
@@ -63,8 +72,8 @@ class DBConfig {
     });
   }
 
-  config(dbConfig: DbConfigOptions = this.db.dbConfig) {
-    if (this.db.initialized) {
+  config(dbConfig: DbConfigOptions = this.dbConfig) {
+    if (this.initialized) {
       throw new Error('Database already initialized');
     }
 
@@ -86,8 +95,18 @@ class DBConfig {
   start() {
     this.createSchema();
 
-    this.db.initialized = true;
+    this.initialized = true;
+  }
+
+  static getInstance() {
+    if (!this.instance) {
+      this.instance = new DBConfig();
+    }
+
+    return this.instance;
   }
 }
 
-export { DBConfig };
+const DB = new DBConfig();
+
+export { DBConfig, DB };

@@ -7,12 +7,19 @@ class Model {
 
   protected static primaryKey: string = 'id';
 
-  protected static get attr() {
+  protected static get attributes() {
     return new Attributes(this);
   }
 
   protected static get relations() {
     return new Relations(this);
+  }
+
+  static query() {
+    return this.db.getState({
+      type: 'query',
+      payload: { model: this },
+    });
   }
 
   public static insert(object: any) {

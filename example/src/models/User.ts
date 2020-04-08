@@ -5,8 +5,9 @@ class User extends Model {
 
   public static fields() {
     return {
-      id: this.attr.increment(),
-      name: this.attr.string(),
+      id: this.attributes.increment(),
+      name: this.attributes.string(),
+      title: this.attributes.string(),
       posts: this.relations.hasMany('Post', 'test'),
     };
   }

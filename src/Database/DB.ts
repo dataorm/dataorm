@@ -1,15 +1,8 @@
 import { Subject } from '../Observer/Subject';
-import { DbConfig, Action } from './types';
+import { Action } from './types';
 
 class Database extends Subject {
   static instance: Database;
-
-  initialized: boolean = false;
-
-  dbConfig: DbConfig = {
-    name: 'db',
-    storage: 'LocalStorage',
-  };
 
   models: any[] = [];
 
@@ -18,14 +11,6 @@ class Database extends Subject {
   getState: (action: Action) => any = () => {};
 
   dispatch: (action: Action) => any = () => {};
-
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new Database();
-    }
-
-    return this.instance;
-  }
 
   setState(state: any) {
     this.state = state;
@@ -37,6 +22,14 @@ class Database extends Subject {
 
   setDispatch(dispatch: (action: Action) => any) {
     this.dispatch = dispatch;
+  }
+
+  static getInstance() {
+    if (!this.instance) {
+      this.instance = new Database();
+    }
+
+    return this.instance;
   }
 }
 

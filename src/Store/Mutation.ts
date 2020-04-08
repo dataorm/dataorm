@@ -1,5 +1,6 @@
 import { Database } from '../Database/DB';
 import { Action } from '../Database/types';
+import { DB } from '../Database/DBConfig';
 
 class Mutation {
   private db: Database = Database.getInstance();
@@ -11,7 +12,7 @@ class Mutation {
   }
 
   collection(entity: string): any[] {
-    return this.db.state[this.db.dbConfig.name][entity];
+    return this.db.state[DB.dbConfig.name][entity];
   }
 
   create({ payload }: Action) {
@@ -22,7 +23,7 @@ class Mutation {
       : collection.length + 1;
 
     const entities = {
-      [this.db.dbConfig.name]: {
+      [DB.dbConfig.name]: {
         [payload.model.entity]: [...collection, payload.data],
       },
     };
@@ -40,7 +41,7 @@ class Mutation {
     });
 
     const entities = {
-      [this.db.dbConfig.name]: {
+      [DB.dbConfig.name]: {
         [payload.model.entity]: newCollection,
       },
     };
@@ -58,7 +59,7 @@ class Mutation {
     );
 
     const entities = {
-      [this.db.dbConfig.name]: {
+      [DB.dbConfig.name]: {
         [payload.model.entity]: newCollection,
       },
     };
