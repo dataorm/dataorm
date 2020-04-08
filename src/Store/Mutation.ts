@@ -20,7 +20,7 @@ class Mutation {
 
     const maxId = Math.max(...collection.map(col => col.id));
 
-    const nextId = maxId === Infinity ? 1 : maxId + 1;
+    const nextId = collection.length ? maxId + 1 : 1;
 
     payload.data['id'] = payload.data['id'] ? payload.data['id'] : nextId;
 

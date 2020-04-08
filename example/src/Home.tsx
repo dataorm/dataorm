@@ -2,10 +2,10 @@ import * as React from 'react';
 import { User } from './models/User';
 
 export function Home() {
+  const [updatableUser, setUpdatableUser] = React.useState(null);
+
   const nameRef = React.useRef('');
   const emailRef = React.useRef('');
-
-  const allUsers = User.get();
 
   const users = User.query()
     .where('name', '=', 'kapu')
@@ -13,28 +13,39 @@ export function Home() {
     .orWhere('name', '=', 'jayesh')
     .get();
 
-  console.log(users, 'users');
-
   return (
     <div>
       <form
         onSubmit={e => {
           e.preventDefault();
-          User.create({
+          const data = {
+            id: updatableUser.id,
             name: nameRef.current.value,
             email: emailRef.current.value,
-          });
+          };
+
+          if (updatableUser) {
+            User.update(data);
+          } else {
+            User.create(data);
+          }
+
           emailRef.current.value = '';
           nameRef.current.value = '';
         }}
       >
         <input placeholder="email" ref={emailRef} />
         <input placeholder="name" ref={nameRef} />
-        <button type="submit">add</button>
+
+        {updatableUser ? (
+          <button type="submit">update</button>
+        ) : (
+          <button type="submit">add</button>
+        )}
       </form>
 
       <div>
-        {allUsers.map((user: any) => {
+        {users.data.map((user: any) => {
           return (
             <div key={user.id}>
               <div
@@ -48,6 +59,15 @@ export function Home() {
                 <div style={{ marginRight: 10, width: 200 }}>{user.email}</div>
                 <div>
                   <button onClick={() => User.delete(user.id)}>delete</button>
+                  <button
+                    onClick={() => {
+                      emailRef.current.value = user.email;
+                      nameRef.current.value = user.name;
+                      setUpdatableUser(user);
+                    }}
+                  >
+                    update
+                  </button>
                 </div>
               </div>
             </div>
