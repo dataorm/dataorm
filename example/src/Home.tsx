@@ -10,6 +10,7 @@ export function Home() {
   const users = User.query()
     .where('name', '=', 'kapu')
     .orWhere('email', '=', 'kalpit@gmail.com')
+    .orWhere('name', '=', 'jayesh')
     .get();
 
   console.log(users, 'users');

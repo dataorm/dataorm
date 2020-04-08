@@ -18,9 +18,11 @@ class Mutation {
   create({ payload }: Action) {
     const collection = this.collection(payload.model.entity);
 
-    payload.data['id'] = payload.data['id']
-      ? payload.data['id']
-      : collection.length + 1;
+    const maxId = Math.max(...collection.map(col => col.id));
+
+    const nextId = maxId === Infinity ? 1 : maxId + 1;
+
+    payload.data['id'] = payload.data['id'] ? payload.data['id'] : nextId;
 
     const entities = {
       [DB.dbConfig.name]: {
