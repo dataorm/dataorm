@@ -18,29 +18,22 @@ export class QueryBuilder {
   }
 
   protected filterData() {
-    return this.queries.filter(q => {
-      if (q.value instanceof Object || q.value instanceof Array) {
-        throw new Error('Invalid Query');
-      }
-
-      //   switch (q.modifier) {
-      //   case '=': {
-      //     const queryResult = this.data.filter(
-      //       user => user[q.key] === q.value
-      //     );
-
-      //     console.log(queryResult);
-
-      //     if (q.selector === 'orWhere') {
-      //       this.filteredData = [...this.filteredData, ...queryResult];
-      //     } else {
-      //       this.filteredData = queryResult;
-      //     }
-      //   }
-      // }
-
-      return true;
+    const filteredOrQueries = this.collection.filter((collection: any) => {
+      return this.queries
+        .filter(q => q.query === 'or')
+        .some(query => this.verifyQuerySelector(query, collection));
     });
+
+    const filteredAndQueries = this.collection.filter((collection: any) => {
+      return this.queries
+        .filter(q => q.query === 'and')
+        .every(query => this.verifyQuerySelector(query, collection));
+    });
+
+    return mergeObjectsInUnique(
+      [...filteredOrQueries, ...filteredAndQueries],
+      'id'
+    );
   }
 
   protected generateFilterableQuery(args: any[], query: string) {
@@ -61,7 +54,7 @@ export class QueryBuilder {
       return Object.keys(args[0]).forEach((key: string) => {
         this.queries.push({
           key: key,
-          modifier: '=',
+          selector: '=',
           value: args[0][key],
           query,
         });
@@ -70,20 +63,20 @@ export class QueryBuilder {
 
     this.queries.push({
       key: args[0],
-      modifier: args.length === 2 ? '=' : args[1],
+      selector: args.length === 2 ? '=' : args[1],
       value: args.length === 2 ? args[1] : args[2],
       query,
     });
   }
 
   public where(...args: any[]): QueryBuilder {
-    this.generateFilterableQuery(args, 'where');
+    this.generateFilterableQuery(args, 'and');
 
     return this;
   }
 
   public orWhere(...args: any[]): QueryBuilder {
-    this.generateFilterableQuery(args, 'orWhere');
+    this.generateFilterableQuery(args, 'or');
 
     return this;
   }
@@ -93,4 +86,31 @@ export class QueryBuilder {
 
     return new Collection(filteredData);
   }
+
+  protected verifyQuerySelector(query: any, collection: any) {
+    switch (query.selector) {
+      case '=': {
+        return collection[query.key] === query.value;
+      }
+      case '>': {
+        return collection[query.key] > query.value;
+      }
+      default: {
+        return false;
+      }
+    }
+  }
+}
+
+export function mergeObjectsInUnique(array: any[], property: any): any[] {
+  const newArray = new Map();
+
+  array.forEach((item: any) => {
+    const propertyValue = item[property];
+    newArray.has(propertyValue)
+      ? newArray.set(propertyValue, { ...item, ...newArray.get(propertyValue) })
+      : newArray.set(propertyValue, item);
+  });
+
+  return Array.from(newArray.values());
 }
