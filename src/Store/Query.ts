@@ -2,14 +2,14 @@ import { Database } from '../Database/DB';
 import { Action } from '../Database/types';
 import { ModelNotFound } from '../Exceptions/ModelNotFound';
 import { QueryBuilder } from '../Model/QueryBuilder';
-import { DB } from '../Database/DBConfig';
+import { OrmStore } from '../Database/OrmStore';
 import { Collection } from '../Model/Collection';
 
 class Query {
   private db: Database = Database.getInstance();
 
   collection(entity: string) {
-    return this.db.state[DB.dbConfig.name][entity];
+    return this.db.state[OrmStore.dbConfig.name][entity];
   }
 
   query({ payload }: Action) {

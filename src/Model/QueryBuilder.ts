@@ -1,6 +1,6 @@
 import { Database } from '../Database/DB';
 import { Collection } from './Collection';
-import { DB } from '../Database/DBConfig';
+import { OrmStore } from '../Database/OrmStore';
 import { mergeObjectsInUnique } from '../Utils/unique';
 
 export class QueryBuilder {
@@ -15,7 +15,7 @@ export class QueryBuilder {
   }
 
   get collection() {
-    return this.db.state[DB.dbConfig.name][this.model.entity];
+    return this.db.state[OrmStore.dbConfig.name][this.model.entity];
   }
 
   protected filterData() {

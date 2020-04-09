@@ -1,6 +1,6 @@
 import { Database } from '../Database/DB';
 import { Action } from '../Database/types';
-import { DB } from '../Database/DBConfig';
+import { OrmStore } from '../Database/OrmStore';
 
 class Mutation {
   private db: Database = Database.getInstance();
@@ -12,7 +12,7 @@ class Mutation {
   }
 
   collection(entity: string): any[] {
-    return this.db.state[DB.dbConfig.name][entity];
+    return this.db.state[OrmStore.dbConfig.name][entity];
   }
 
   create({ payload }: Action) {
@@ -25,7 +25,7 @@ class Mutation {
     payload.data['id'] = payload.data['id'] ? payload.data['id'] : nextId;
 
     const entities = {
-      [DB.dbConfig.name]: {
+      [OrmStore.dbConfig.name]: {
         [payload.model.entity]: [...collection, payload.data],
       },
     };
@@ -49,7 +49,7 @@ class Mutation {
     });
 
     const entities = {
-      [DB.dbConfig.name]: {
+      [OrmStore.dbConfig.name]: {
         [payload.model.entity]: newCollection,
       },
     };
@@ -67,7 +67,7 @@ class Mutation {
     );
 
     const entities = {
-      [DB.dbConfig.name]: {
+      [OrmStore.dbConfig.name]: {
         [payload.model.entity]: newCollection,
       },
     };

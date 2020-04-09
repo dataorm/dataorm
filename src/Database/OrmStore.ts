@@ -118,6 +118,6 @@ class DBConfig {
   }
 }
 
-const DB = new DBConfig();
+const OrmStore = new DBConfig();
 
-export { DBConfig, DB };
+export { DBConfig, OrmStore };

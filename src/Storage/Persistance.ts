@@ -1,8 +1,8 @@
-import { DB } from '../Database/DBConfig';
+import { OrmStore } from '../Database/OrmStore';
 
 class Persistance {
   static persist(data: any) {
-    if (DB.dbConfig.storage === 'LocalStorage') {
+    if (OrmStore.dbConfig.storage === 'LocalStorage') {
       localStorage.setItem('root', JSON.stringify(data));
     }
   }

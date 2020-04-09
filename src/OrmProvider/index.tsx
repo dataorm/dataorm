@@ -6,11 +6,11 @@ import { Query } from '../Store/Query';
 const OrmContext = createContext({});
 
 export const OrmProvider = ({ children, store }: any) => {
-  const db = store?.db;
-
-  if (!store || !db.initialized) {
+  if (!store || !store.initialized) {
     throw new Error('You might forget to initialize database');
   }
+
+  const db = store.db;
 
   const [context, setContext]: any = useState(db.state);
 
