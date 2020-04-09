@@ -38,8 +38,14 @@ class Mutation {
   update({ payload }: Action) {
     const collection = this.collection(payload.model.entity);
 
-    const newCollection = collection.map((c: any) => {
-      return c.id === payload.data.id ? payload.data : c;
+    const newCollection = collection.map((col: any) => {
+      const ids: any[] = payload.data.updatableRecords.map(
+        (rec: any) => rec.id
+      );
+
+      return ids.includes(col.id)
+        ? { ...col, ...payload.data.updatableData }
+        : col;
     });
 
     const entities = {

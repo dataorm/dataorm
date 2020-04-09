@@ -1,10 +1,10 @@
-import { Boolean } from './Boolean';
-import { Datetime } from './Datetime';
-import { Increment } from './Increment';
-import { Json } from './Json';
-import { Number } from './Number';
-import { String } from './String';
-import { Uuid } from './Uuid';
+import { BooleanAttr } from './BooleanAttr';
+import { DatetimeAttr } from './DatetimeAttr';
+import { IncrementAttr } from './IncrementAttr';
+import { JsonAttr } from './JsonAttr';
+import { NumberAttr } from './NumberAttr';
+import { StringAttr } from './StringAttr';
+import { UuidAttr } from './UuidAttr';
 
 export class Attributes {
   private model: any;
@@ -14,30 +14,30 @@ export class Attributes {
   }
 
   public increment() {
-    return Increment.make(this.model);
+    return new IncrementAttr(this.model);
   }
 
   public uuid() {
-    return Uuid.make(this.model);
+    return new UuidAttr(this.model);
   }
 
   public string() {
-    return String.make(this.model);
+    return new StringAttr(this.model);
   }
 
   public json() {
-    return Json.make(this.model);
+    return new JsonAttr(this.model);
   }
 
   public number() {
-    return Number.make(this.model);
+    return new NumberAttr(this.model);
   }
 
   public boolean() {
-    return Boolean.make(this.model);
+    return new BooleanAttr(this.model);
   }
 
   public datetime() {
-    return Datetime.make(this.model);
+    return new DatetimeAttr(this.model);
   }
 }

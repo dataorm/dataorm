@@ -8,9 +8,7 @@ export function Home() {
   const emailRef = React.useRef('');
 
   const users = User.query()
-    .where('name', '=', 'kapu')
-    .orWhere('email', '=', 'kalpit@gmail.com')
-    .orWhere('name', '=', 'jayesh')
+    .orderBy('id', 'desc')
     .get();
 
   return (
@@ -19,13 +17,14 @@ export function Home() {
         onSubmit={e => {
           e.preventDefault();
           const data = {
-            id: updatableUser.id,
             name: nameRef.current.value,
             email: emailRef.current.value,
           };
 
-          if (updatableUser) {
-            User.update(data);
+          if (updatableUser !== null) {
+            User.query()
+              .where('id', '=', updatableUser.id)
+              .update(data);
           } else {
             User.create(data);
           }
@@ -55,8 +54,9 @@ export function Home() {
                   margin: 10,
                 }}
               >
-                <div style={{ marginRight: 10, width: 100 }}>{user.name}</div>
+                <div style={{ marginRight: 10, width: 20 }}>{user.id}</div>
                 <div style={{ marginRight: 10, width: 200 }}>{user.email}</div>
+                <div style={{ marginRight: 10, width: 100 }}>{user.name}</div>
                 <div>
                   <button onClick={() => User.delete(user.id)}>delete</button>
                   <button

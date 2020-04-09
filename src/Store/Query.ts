@@ -3,6 +3,7 @@ import { Action } from '../Database/types';
 import { ModelNotFound } from '../Exceptions/ModelNotFound';
 import { QueryBuilder } from '../Model/QueryBuilder';
 import { DB } from '../Database/DBConfig';
+import { Collection } from '../Model/Collection';
 
 class Query {
   private db: Database = Database.getInstance();
@@ -40,10 +41,10 @@ class Query {
     return findById;
   }
 
-  get({ payload }: Action) {
+  all({ payload }: Action) {
     const entities: any[] = this.collection(payload.model.entity);
 
-    return entities;
+    return new Collection().fromArray(entities);
   }
 }
 

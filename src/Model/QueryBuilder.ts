@@ -1,6 +1,7 @@
 import { Database } from '../Database/DB';
 import { Collection } from './Collection';
 import { DB } from '../Database/DBConfig';
+import { mergeObjectsInUnique } from '../Utils/unique';
 
 export class QueryBuilder {
   private model: any;
@@ -81,10 +82,25 @@ export class QueryBuilder {
     return this;
   }
 
+  public update(updatableData: any) {
+    const updatableRecords = this.filterData();
+
+    return this.db.dispatch({
+      type: 'update',
+      payload: {
+        model: this.model,
+        data: {
+          updatableData,
+          updatableRecords,
+        },
+      },
+    });
+  }
+
   public get(): Collection {
     const filteredData = this.filterData();
 
-    return new Collection(filteredData);
+    return new Collection().fromArray(filteredData);
   }
 
   protected verifyQuerySelector(query: any, collection: any) {
@@ -100,17 +116,47 @@ export class QueryBuilder {
       }
     }
   }
-}
 
-export function mergeObjectsInUnique(array: any[], property: any): any[] {
-  const newArray = new Map();
+  public orderBy(key: string, value: keyof { asc: 'asc'; desc: 'desc' }) {
+    this.collection.sort((a: any, b: any) => {
+      const param1 = a[key];
+      const param2 = b[key];
 
-  array.forEach((item: any) => {
-    const propertyValue = item[property];
-    newArray.has(propertyValue)
-      ? newArray.set(propertyValue, { ...item, ...newArray.get(propertyValue) })
-      : newArray.set(propertyValue, item);
-  });
+      if (typeof param1 === 'string' && typeof param2 === 'string') {
+        if (value === 'asc') {
+          return param1 < param2 ? -1 : 1;
+        }
 
-  return Array.from(newArray.values());
+        if (value === 'desc') {
+          return param1 > param2 ? 1 : -1;
+        }
+
+        return 0;
+      }
+
+      if (typeof param1 === 'number' && typeof param2 === 'number') {
+        if (value === 'asc') {
+          return param1 - param2 ? -1 : 1;
+        }
+
+        if (value === 'desc') {
+          return param1 - param2 ? 1 : -1;
+        }
+
+        return 0;
+      }
+
+      return 0;
+    });
+
+    return this;
+  }
+
+  public take(limit: number) {
+    return this.collection.splice(0, limit);
+  }
+
+  public count() {
+    return this.collection.length;
+  }
 }

@@ -1,11 +1,21 @@
 export class Collection {
-  data: any[] = [];
+  public data: any[] = [];
 
-  constructor(data: any) {
-    this.data = data;
+  public fromArray(array: any[]) {
+    this.data = array;
+
+    return this;
   }
 
-  toArray() {
-    console.log('converting instances to array');
+  public toArray() {
+    return this.data;
+  }
+
+  public find() {
+    return this.data;
+  }
+
+  public findMany() {
+    return this.data;
   }
 }

@@ -1,6 +1,7 @@
 import { Attributes } from '../Attributes/Attributes';
 import { Database } from '../Database/DB';
 import { Relations } from '../Relations/Relations';
+import { Collection } from './Collection';
 
 class Model {
   private static db: Database = Database.getInstance();
@@ -29,9 +30,9 @@ class Model {
     });
   }
 
-  public static get() {
+  public static all(): Collection {
     return this.db.getState({
-      type: 'get',
+      type: 'all',
       payload: { model: this },
     });
   }
