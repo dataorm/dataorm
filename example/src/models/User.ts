@@ -3,13 +3,18 @@ import { Model } from 'dataorm';
 class User extends Model {
   public static entity = 'users';
 
+  public static primaryKey = 'id';
+
   public static fields() {
     return {
-      id: this.attributes.increment(),
+      id: this.attributes.uuid(),
       name: this.attributes.string(),
-      title: this.attributes.string(),
-      posts: this.relations.hasMany('Post', 'test'),
+      email: this.attributes.string(),
     };
+  }
+
+  public static posts() {
+    return this.relations.hasMany('Post');
   }
 }
 

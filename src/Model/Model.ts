@@ -6,6 +6,8 @@ import { Collection } from './Collection';
 class Model {
   private static db: Database = Database.getInstance();
 
+  protected static entity: string = '';
+
   protected static primaryKey: string = 'id';
 
   protected static get attributes() {
@@ -59,6 +61,8 @@ class Model {
   }
 
   public static update(object: any) {
+    new Attributes(this).validate(object);
+
     return this.db.dispatch({
       type: 'update',
       payload: { model: this, data: object },
@@ -66,6 +70,8 @@ class Model {
   }
 
   public static create(object: any) {
+    new Attributes(this).validate(object);
+
     return this.db.dispatch({
       type: 'create',
       payload: { model: this, data: object },

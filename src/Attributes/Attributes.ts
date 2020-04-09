@@ -40,4 +40,14 @@ export class Attributes {
   public datetime() {
     return new DatetimeAttr(this.model);
   }
+
+  validate(data: any) {
+    const fields = this.model.fields();
+
+    Object.keys(fields).forEach((key: any) => {
+      const instance = fields[key];
+
+      instance.validate(data, key);
+    });
+  }
 }

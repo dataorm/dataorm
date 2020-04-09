@@ -17,6 +17,7 @@ export function Home() {
         onSubmit={e => {
           e.preventDefault();
           const data = {
+            id: 'c12f198b-28a2-47fd-bc26-7e74d8f3898f',
             name: nameRef.current.value,
             email: emailRef.current.value,
           };
@@ -54,7 +55,7 @@ export function Home() {
                   margin: 10,
                 }}
               >
-                <div style={{ marginRight: 10, width: 20 }}>{user.id}</div>
+                <div style={{ marginRight: 10, width: 300 }}>{user.id}</div>
                 <div style={{ marginRight: 10, width: 200 }}>{user.email}</div>
                 <div style={{ marginRight: 10, width: 100 }}>{user.name}</div>
                 <div>

@@ -43,7 +43,7 @@ export const OrmProvider = ({ children }: any) => {
     db.subscribe((data: any) => {
       Persistance.persist(data);
     });
-  }, []);
+  }, [db]);
 
   return (
     <OrmContext.Provider value={{ context, setContext }}>

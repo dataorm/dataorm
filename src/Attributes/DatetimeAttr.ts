@@ -1,4 +1,4 @@
-export class DatetimeAttr {
+export class DatetimeAttr implements ShouldBeValidField {
   protected model: any;
   protected defaultValue: string | null = null;
 
@@ -11,5 +11,11 @@ export class DatetimeAttr {
       defaultValue instanceof Date ? defaultValue.toISOString() : defaultValue;
 
     return this;
+  }
+
+  validate(data: any, key: string) {
+    console.log(data, key);
+
+    throw new Error('Method not implemented.');
   }
 }

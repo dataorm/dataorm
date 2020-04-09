@@ -1,4 +1,4 @@
-export class NumberAttr {
+export class NumberAttr implements ShouldBeValidField {
   protected model: any;
   protected isNull: boolean = false;
   protected isUnique: boolean = false;
@@ -24,5 +24,11 @@ export class NumberAttr {
     this.defaultValue = defaultValue;
 
     return this;
+  }
+
+  validate(data: any, key: string) {
+    console.log(data, key);
+
+    throw new Error('Method not implemented.');
   }
 }

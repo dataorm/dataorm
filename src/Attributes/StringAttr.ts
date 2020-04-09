@@ -1,4 +1,4 @@
-export class StringAttr {
+export class StringAttr implements ShouldBeValidField {
   protected model: any;
   protected isNull: boolean = false;
   protected isUnique: boolean = false;
@@ -24,5 +24,11 @@ export class StringAttr {
     this.defaultValue = defaultValue;
 
     return this;
+  }
+
+  validate(data: any, key: string) {
+    if (!this.isNull && !data[key]) {
+      throw new Error(`${key} can not be null.`);
+    }
   }
 }
