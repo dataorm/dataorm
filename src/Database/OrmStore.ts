@@ -3,7 +3,6 @@ import Pluralize from 'pluralize';
 import { Model } from '../Model/Model';
 import { Database } from './DB';
 import { DbConfig, DbConfigOptions } from './types';
-import { MiddlewareInterface } from 'Storage/Contracts/MiddlewareInterface';
 
 class DBConfig {
   static instance: DBConfig;
@@ -12,7 +11,7 @@ class DBConfig {
 
   dbConfig: DbConfig = {
     name: 'db',
-    storage: 'LocalStorage',
+    sync: null,
   };
 
   initialized: boolean = false;
@@ -89,14 +88,6 @@ class DBConfig {
     const entity = this.createModelBinding(model);
 
     this.db.models.push(entity);
-
-    return this;
-  }
-
-  runMiddlewares(middlewares: MiddlewareInterface[]) {
-    middlewares.forEach((middleware: MiddlewareInterface) => {
-      middleware.init(this.db);
-    });
 
     return this;
   }

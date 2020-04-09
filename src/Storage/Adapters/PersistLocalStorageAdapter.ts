@@ -1,4 +1,4 @@
-import { StorageAdapterInterface } from 'Storage/Contracts/StorageAdapterInterface';
+import { StorageAdapterInterface } from '../Contracts/StorageAdapterInterface';
 
 class PersistLocalStorageAdapter implements StorageAdapterInterface {
   getItem(key: string): Promise<string | null> {

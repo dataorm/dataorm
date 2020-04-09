@@ -1,4 +1,4 @@
-import { StorageAdapterInterface } from 'Storage/Contracts/StorageAdapterInterface';
+import { StorageAdapterInterface } from '../Contracts/StorageAdapterInterface';
 import AsyncStorage from '@react-native-community/async-storage';
 
 class PersistAsyncStorageAdapter implements StorageAdapterInterface {

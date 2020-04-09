@@ -5,12 +5,12 @@ export interface StorageAdapter {
 
 export interface DbConfig {
   name: string;
-  storage: keyof StorageAdapter;
+  sync: string | null;
 }
 
 export interface DbConfigOptions {
   name?: string;
-  storage?: keyof StorageAdapter;
+  sync?: string | null;
 }
 
 export interface Action {
