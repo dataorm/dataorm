@@ -1,25 +1,18 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { Database } from '../Database/DB';
-import { DB } from '../Database/DBConfig';
 import { Action } from '../Database/types';
-import { Persistance } from '../Storage/Persistance';
 import { Mutation } from '../Store/Mutation';
 import { Query } from '../Store/Query';
 
 const OrmContext = createContext({});
 
-export const OrmProvider = ({ children }: any) => {
-  const db: Database = Database.getInstance();
+export const OrmProvider = ({ children, store }: any) => {
+  const db = store?.db;
 
-  if (!DB.initialized) {
+  if (!store || !db.initialized) {
     throw new Error('You might forget to initialize database');
   }
 
-  const persisted = Persistance.get();
-
-  const persistedData = persisted ? JSON.parse(persisted) : db.state;
-
-  const [context, setContext]: any = useState(persistedData);
+  const [context, setContext]: any = useState(db.state);
 
   db.setState(context);
 
@@ -36,12 +29,6 @@ export const OrmProvider = ({ children }: any) => {
       const results = mutation[type]({ type, payload });
 
       return results;
-    });
-  }, [db]);
-
-  useEffect(() => {
-    db.subscribe((data: any) => {
-      Persistance.persist(data);
     });
   }, [db]);
 

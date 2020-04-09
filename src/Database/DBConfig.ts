@@ -3,6 +3,7 @@ import Pluralize from 'pluralize';
 import { Model } from '../Model/Model';
 import { Database } from './DB';
 import { DbConfig, DbConfigOptions } from './types';
+import { MiddlewareInterface } from 'Storage/Contracts/MiddlewareInterface';
 
 class DBConfig {
   static instance: DBConfig;
@@ -40,7 +41,7 @@ class DBConfig {
     }
     if (
       model.entity &&
-      this.db.models.find((m: any) => m.entity == model.entity)
+      this.db.models.find((m: any) => m.entity === model.entity)
     ) {
       throw new Error(`Duplicate entity name for ${model.name}`);
     }
@@ -92,10 +93,20 @@ class DBConfig {
     return this;
   }
 
+  runMiddlewares(middlewares: MiddlewareInterface[]) {
+    middlewares.forEach((middleware: MiddlewareInterface) => {
+      middleware.init(this.db);
+    });
+
+    return this;
+  }
+
   start() {
     this.createSchema();
 
     this.initialized = true;
+
+    return this;
   }
 
   static getInstance() {

@@ -1,20 +1,20 @@
 class Subject {
-  protected observers: Function[] = [];
+  protected observers: any[] = [];
 
-  public subscribe(fn: Function) {
+  public subscribe(fn: any) {
     this.observers.push(fn);
 
     return () => this.unsubscribe(fn);
   }
 
   public fire(data: object) {
-    this.observers.forEach((fn: Function) => {
+    this.observers.forEach((fn: any) => {
       fn(data);
     });
   }
 
   public unsubscribe(fnr: Function) {
-    this.observers = this.observers.filter((fn) => fn !== fnr);
+    this.observers = this.observers.filter(fn => fn !== fnr);
   }
 }
 

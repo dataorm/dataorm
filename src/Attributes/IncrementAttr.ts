@@ -6,7 +6,11 @@ export class IncrementAttr implements ShouldBeValidField {
   }
 
   validate(data: any, key: string) {
-    if (key === this.model.primaryKey && Math.sign(data[key]) !== 1) {
+    if (
+      key === this.model.primaryKey &&
+      data[key] &&
+      Math.sign(data[key]) !== 1
+    ) {
       throw new Error('Primary key must be a positive number.');
     }
 

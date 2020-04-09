@@ -17,7 +17,6 @@ export function Home() {
         onSubmit={e => {
           e.preventDefault();
           const data = {
-            id: 'c12f198b-28a2-47fd-bc26-7e74d8f3898f',
             name: nameRef.current.value,
             email: emailRef.current.value,
           };

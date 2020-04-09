@@ -1,5 +1,7 @@
+import { v4 } from 'uuid';
 export class UuidAttr implements ShouldBeValidField {
   protected model: any;
+  protected defaultValue = v4();
 
   constructor(model: any) {
     this.model = model;
@@ -8,6 +10,7 @@ export class UuidAttr implements ShouldBeValidField {
   validate(data: any, key: string) {
     if (
       key === this.model.primaryKey &&
+      data[key] &&
       !data[key].match(
         /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
       )
