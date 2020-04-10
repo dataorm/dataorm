@@ -1,30 +1,18 @@
-import {
-  createPersistStore,
-  OrmProvider,
-  OrmStore,
-  PersistGate,
-  persistLocalStorageAdapter,
-} from 'dataorm';
+import { OrmProvider, configureStore } from 'dataorm';
 import * as React from 'react';
 import 'react-app-polyfill/ie11';
 import * as ReactDOM from 'react-dom';
 import App from './src/App';
 import { User } from './src/models/User';
 
-const store = OrmStore.config({ name: 'hello' })
-  .register(User)
-  .start();
-
-const persistor = createPersistStore(store, {
-  key: 'root',
-  storage: persistLocalStorageAdapter,
-});
+const store = configureStore
+  .config({ name: 'hello' })
+  .add(User)
+  .init();
 
 ReactDOM.render(
-  <PersistGate persistor={persistor}>
-    <OrmProvider store={store}>
-      <App />
-    </OrmProvider>
-  </PersistGate>,
+  <OrmProvider store={store}>
+    <App />
+  </OrmProvider>,
   document.getElementById('root')
 );

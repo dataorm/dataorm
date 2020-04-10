@@ -1,19 +1,4 @@
-export interface StorageAdapter {
-  LocalStorage: 'LocalStorage';
-  AsyncStorage: 'AsyncStorage';
-}
-
-export interface DbConfig {
+export interface StoreConfigOptions {
   name: string;
-  sync: string | null;
-}
-
-export interface DbConfigOptions {
-  name?: string;
   sync?: string | null;
-}
-
-export interface Action {
-  type: string;
-  payload: { model: any; data?: any };
 }

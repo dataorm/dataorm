@@ -1,79 +1,17 @@
 import * as React from 'react';
 import { User } from './models/User';
 
-export function Home() {
-  const [updatableUser, setUpdatableUser] = React.useState(null);
+export function Home(props: any) {
+  const users = User.get();
 
-  const nameRef = React.useRef('');
-  const emailRef = React.useRef('');
-
-  const users = User.query()
-    .orderBy('id', 'desc')
-    .get();
+  console.log(props, 'props');
+  console.log(users, 'users');
 
   return (
     <div>
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          const data = {
-            name: nameRef.current.value,
-            email: emailRef.current.value,
-          };
+      <pre>{JSON.stringify(users)}</pre>
 
-          if (updatableUser !== null) {
-            User.query()
-              .where('id', '=', updatableUser.id)
-              .update(data);
-          } else {
-            User.create(data);
-          }
-
-          emailRef.current.value = '';
-          nameRef.current.value = '';
-        }}
-      >
-        <input placeholder="email" ref={emailRef} />
-        <input placeholder="name" ref={nameRef} />
-
-        {updatableUser ? (
-          <button type="submit">update</button>
-        ) : (
-          <button type="submit">add</button>
-        )}
-      </form>
-
-      <div>
-        {users.data.map((user: any) => {
-          return (
-            <div key={user.id}>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  margin: 10,
-                }}
-              >
-                <div style={{ marginRight: 10, width: 300 }}>{user.id}</div>
-                <div style={{ marginRight: 10, width: 200 }}>{user.email}</div>
-                <div style={{ marginRight: 10, width: 100 }}>{user.name}</div>
-                <div>
-                  <button onClick={() => User.delete(user.id)}>delete</button>
-                  <button
-                    onClick={() => {
-                      emailRef.current.value = user.email;
-                      nameRef.current.value = user.name;
-                      setUpdatableUser(user);
-                    }}
-                  >
-                    update
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <button onClick={() => User.create({ name: 'krunal' })}>click</button>
     </div>
   );
 }

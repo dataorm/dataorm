@@ -1,50 +1,16 @@
-import { Database } from '../Database/DB';
-import { Action } from '../Database/types';
-import { ModelNotFound } from '../Exceptions/ModelNotFound';
-import { QueryBuilder } from '../Model/QueryBuilder';
-import { OrmStore } from '../Database/OrmStore';
-import { Collection } from '../Model/Collection';
+import { Store } from '../Database/Store';
 
 class Query {
-  private db: Database = Database.getInstance();
+  private store = Store.instance;
 
-  collection(entity: string) {
-    return this.db.state[OrmStore.dbConfig.name][entity];
+  public model: any;
+
+  constructor(model: any) {
+    this.model = model;
   }
 
-  query({ payload }: Action) {
-    return new QueryBuilder(payload.model);
-  }
-
-  first({ payload }: Action) {
-    const entities: any[] = this.collection(payload.model.entity);
-    const first = entities.length ? entities[0] : null;
-
-    return first;
-  }
-
-  firstOrFail({ type, payload }: Action) {
-    const first = this.first({ type, payload });
-
-    if (first) {
-      return first;
-    }
-
-    throw new ModelNotFound('Oops! Record does not exists in database');
-  }
-
-  find({ payload }: Action) {
-    const entities: any[] = this.collection(payload.model.entity);
-    const find = entities.find(e => e.id === payload.data.id);
-    const findById = find ? find : null;
-
-    return findById;
-  }
-
-  all({ payload }: Action) {
-    const entities: any[] = this.collection(payload.model.entity);
-
-    return new Collection().fromArray(entities);
+  public get() {
+    return this.store.state;
   }
 }
 
