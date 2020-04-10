@@ -11,11 +11,11 @@ export const OrmProvider = ({ children, store }: any) => {
     store.setState = (newState: any) => {
       store.state = newState;
 
-      setUpdatedStore({ ...store.state, newState });
+      setUpdatedStore({ ...updatedStore, state: newState });
     };
   }, [store, updatedStore]);
 
   return React.cloneElement(children, {
-    store,
+    store: updatedStore,
   });
 };
