@@ -5,7 +5,7 @@ class Subject {
 
   protected observers: ObserverInterface[] = [];
 
-  constructor() {
+  private constructor() {
     if (Subject._instance) {
       throw new Error('Already initialized');
     }

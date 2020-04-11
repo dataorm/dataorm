@@ -5,12 +5,28 @@ class Query {
 
   public model: any;
 
+  public builder = {
+    or: [],
+    and: [],
+    in: [],
+  };
+
+  public load = [];
+
   constructor(model: any) {
     this.model = model;
   }
 
-  public get() {
+  public all() {
     return this.store.state;
+  }
+
+  public where() {
+    return new Query(this.model);
+  }
+
+  public with() {
+    return new Query(this.model);
   }
 }
 

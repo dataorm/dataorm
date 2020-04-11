@@ -19,7 +19,7 @@ class Store {
 
   public setState: any;
 
-  constructor() {
+  private constructor() {
     if (Store._instance) {
       throw new Error('Already initialized');
     }

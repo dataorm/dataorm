@@ -12,9 +12,16 @@ class Mutation {
   }
 
   public create(object: any) {
-    this.store.setState(object);
+    const immutableStore = Object.assign(this.store.state);
 
-    this.subject.fire(this.store.state);
+    const collection =
+      immutableStore[this.store.config.name][this.model.entity];
+
+    collection.push(object);
+
+    this.store.setState(immutableStore);
+
+    this.subject.fire(immutableStore);
   }
 }
 

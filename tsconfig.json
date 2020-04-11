@@ -13,6 +13,7 @@
     "module": "esnext",
     "target": "ES6",
     "lib": ["dom", "esnext"],
+    "types": ["node"],
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,

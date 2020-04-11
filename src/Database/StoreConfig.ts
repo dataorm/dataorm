@@ -10,7 +10,7 @@ class StoreConfig {
 
   private store: Store = Store.instance;
 
-  constructor() {
+  private constructor() {
     if (StoreConfig._instance) {
       throw new Error('Already initialized');
     }
