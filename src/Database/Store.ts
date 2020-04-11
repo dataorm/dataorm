@@ -11,13 +11,19 @@ class Store {
     sync: null,
   };
 
-  public state: any = {};
+  private _state: any = {};
+
+  public get state() {
+    return this._state;
+  }
 
   public init: any = false;
 
   public models: any[] = [];
 
-  public setState: any;
+  public setState: (data: any) => any = (data: any) => {
+    this._state = data;
+  };
 
   private constructor() {
     if (Store._instance) {

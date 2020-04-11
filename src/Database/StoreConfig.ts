@@ -41,7 +41,7 @@ class StoreConfig {
 
     this.store.config = this.generateConfig(config);
 
-    this.store.state = { [this.store.config.name]: {} };
+    this.store.setState({ [this.store.config.name]: {} });
 
     return this;
   }

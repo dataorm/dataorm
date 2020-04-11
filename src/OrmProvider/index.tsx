@@ -8,11 +8,9 @@ export const OrmProvider = ({ children, store }: any) => {
   const [updatedStore, setUpdatedStore] = React.useState(store);
 
   React.useEffect(() => {
-    store.setState = (newState: any) => {
-      store.state = newState;
-
-      setUpdatedStore({ ...updatedStore, state: newState });
-    };
+    store.subscribe((state: any) => {
+      setUpdatedStore({ ...updatedStore, state });
+    });
   }, [store, updatedStore]);
 
   return React.cloneElement(children, {
