@@ -1,8 +1,11 @@
 import { Store } from '../Database/Store';
+import { lazyInject } from '../IoC/bindings';
+import { TYPES } from '../IoC/types';
 import { Subject } from '../Observer/Subject';
 
 class Mutation {
-  private store = Store.instance;
+  @lazyInject(TYPES.Store) private store!: Store;
+
   private subject = Subject.instance;
 
   public model: any;

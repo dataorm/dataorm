@@ -1,14 +1,15 @@
-import { StoreConfigOptions } from './types';
-import { Store } from './Store';
-import { Model } from '../Model/Model';
-
 import { snakeCase } from 'change-case';
 import Pluralize from 'pluralize';
+import { lazyInject } from '../IoC/bindings';
+import { TYPES } from '../IoC/types';
+import { Model } from '../Model/Model';
+import { Store } from './Store';
+import { StoreConfigOptions } from './types';
 
 class StoreConfig {
   private static _instance: StoreConfig = new StoreConfig();
 
-  private store: Store = Store.instance;
+  @lazyInject(TYPES.Store) private store!: Store;
 
   private constructor() {
     if (StoreConfig._instance) {

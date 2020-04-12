@@ -18,6 +18,10 @@ class Subject {
   }
 
   public subscribe(fn: ObserverInterface) {
+    const exists = this.observers.find(sub => sub === fn);
+
+    if (exists) throw new Error('Already Subscribed');
+
     this.observers.push(fn);
 
     return () => this.unsubscribe(fn);

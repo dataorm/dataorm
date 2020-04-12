@@ -1,9 +1,9 @@
 import { Subject, ObserverInterface } from '../Observer/Subject';
 import { StoreConfigOptions } from './types';
+import { injectable } from 'inversify';
 
+@injectable()
 class Store {
-  private static _instance: Store = new Store();
-
   private subject = Subject.instance;
 
   public config: StoreConfigOptions = {
@@ -25,20 +25,8 @@ class Store {
     this._state = data;
   };
 
-  private constructor() {
-    if (Store._instance) {
-      throw new Error('Already initialized');
-    }
-
-    Store._instance = this;
-  }
-
   public subscribe(fn: ObserverInterface) {
     return this.subject.subscribe(fn);
-  }
-
-  public static get instance(): Store {
-    return this._instance;
   }
 }
 

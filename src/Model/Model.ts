@@ -3,8 +3,12 @@ import { Query } from '../Store/Query';
 import { Attributes } from '../Attributes/Attributes';
 import { Relations } from '../Relations/Relations';
 import { Store } from '../Database/Store';
+import { TYPES } from '../IoC/types';
+import { lazyInject } from '../IoC/bindings';
 
 abstract class Model {
+  @lazyInject(TYPES.Store) private store!: Store;
+
   protected static entity: string | null = null;
 
   protected static primaryKey: string = 'id';
@@ -18,9 +22,7 @@ abstract class Model {
   }
 
   protected get fields() {
-    const store = Store.instance;
-
-    const model = store.models.find(model => {
+    const model = this.store.models.find(model => {
       return this instanceof model.model === true;
     });
 

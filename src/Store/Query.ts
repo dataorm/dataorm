@@ -1,7 +1,9 @@
 import { Store } from '../Database/Store';
+import { lazyInject } from '../IoC/bindings';
+import { TYPES } from '../IoC/types';
 
 class Query {
-  private store = Store.instance;
+  @lazyInject(TYPES.Store) private store!: Store;
 
   public model: any;
 

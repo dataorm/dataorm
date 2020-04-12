@@ -12,8 +12,8 @@
   "compilerOptions": {
     "module": "esnext",
     "target": "ES6",
-    "lib": ["dom", "esnext"],
-    "types": ["node"],
+    "lib": ["dom", "es5", "es6", "es2017", "esnext"],
+    "types": ["node", "reflect-metadata"],
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,
@@ -30,6 +30,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "baseUrl": "./",
     "paths": {
       "*": ["src/*", "node_modules/*"]
