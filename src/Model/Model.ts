@@ -1,13 +1,13 @@
+import { Attributes } from '../Attributes/Attributes';
+import { Store } from '../Database/Store';
+import { container } from '../IoC/bindings';
+import { TYPES } from '../IoC/types';
+import { Relations } from '../Relations/Relations';
 import { Mutation } from '../Store/Mutation';
 import { Query } from '../Store/Query';
-import { Attributes } from '../Attributes/Attributes';
-import { Relations } from '../Relations/Relations';
-import { Store } from '../Database/Store';
-import { TYPES } from '../IoC/types';
-import { lazyInject } from '../IoC/bindings';
 
 abstract class Model {
-  @lazyInject(TYPES.Store) private store!: Store;
+  private store: Store = container.get(TYPES.Store);
 
   protected static entity: string | null = null;
 

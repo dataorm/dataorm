@@ -1,4 +1,5 @@
 import { snakeCase } from 'change-case';
+import { injectable } from 'inversify';
 import Pluralize from 'pluralize';
 import { container } from '../IoC/bindings';
 import { TYPES } from '../IoC/types';
@@ -6,6 +7,7 @@ import { Model } from '../Model/Model';
 import { Store } from './Store';
 import { StoreConfigOptions } from './types';
 
+@injectable()
 class StoreConfig {
   private store: Store = container.get(TYPES.Store);
 
