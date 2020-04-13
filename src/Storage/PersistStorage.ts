@@ -1,5 +1,5 @@
 import { StorageAdapterInterface } from './Contracts/StorageAdapterInterface';
-import { Store } from '../Database/Store';
+import { Store } from '../Store/Store';
 
 interface config {
   storage: StorageAdapterInterface;

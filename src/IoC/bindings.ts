@@ -1,24 +1,19 @@
 import 'reflect-metadata';
-import getDecorators from 'inversify-inject-decorators';
 
 import { Container } from 'inversify';
-import { TYPES } from './types';
-
-import { Store } from '../Database/Store';
-import { StoreConfig } from '../Store/StoreConfig';
+import { Store } from '../Store/Store';
+import { Subject } from '../Observer/Subject';
 
 const container = new Container();
 
 container
-  .bind<Store>(TYPES.Store)
+  .bind<Store>('Store')
   .to(Store)
   .inSingletonScope();
 
 container
-  .bind<StoreConfig>(TYPES.StoreConfig)
-  .to(StoreConfig)
+  .bind<Subject>('Subject')
+  .to(Subject)
   .inSingletonScope();
 
 export { container };
-
-export const { lazyInject } = getDecorators(container, false);

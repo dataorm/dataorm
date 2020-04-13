@@ -1,0 +1,18 @@
+Subject
+    - 
+
+Store
+    - Subject
+
+Model
+    - Store
+
+StoreConfig
+    - Store
+
+Query
+    - Store
+
+Mutation
+    - Store
+    - Subject

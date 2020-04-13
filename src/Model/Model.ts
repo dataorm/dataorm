@@ -1,13 +1,12 @@
 import { Attributes } from '../Attributes/Attributes';
-import { Store } from '../Database/Store';
-import { container } from '../IoC/bindings';
-import { TYPES } from '../IoC/types';
+import { Store } from '../Store/Store';
 import { Relations } from '../Relations/Relations';
 import { Mutation } from '../Store/Mutation';
 import { Query } from '../Store/Query';
+import { container } from '../IoC/bindings';
 
 abstract class Model {
-  private store: Store = container.get(TYPES.Store);
+  private store: Store = container.get<Store>('Store');
 
   protected static entity: string | null = null;
 

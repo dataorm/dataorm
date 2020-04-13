@@ -1,5 +1,5 @@
-import { Store } from './Database/Store';
-import { configureStore } from './Database/StoreConfig';
+import { Store } from './Store/Store';
+import { configureStore } from './Store/StoreConfig';
 import { Model } from './Model/Model';
 import { OrmProvider } from './OrmProvider';
 import { persistLocalStorageAdapter } from './Storage/Adapters/PersistLocalStorageAdapter';

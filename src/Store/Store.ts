@@ -1,12 +1,10 @@
-import { injectable } from 'inversify';
-import { container } from '../IoC/bindings';
-import { TYPES } from '../IoC/types';
 import { ObserverInterface, Subject } from '../Observer/Subject';
 import { StoreConfigOptions } from './types';
+import { injectable } from 'inversify';
 
 @injectable()
 class Store {
-  private subject: Subject = container.get(TYPES.Subject);
+  private subject: Subject = new Subject();
 
   public config: StoreConfigOptions = {
     name: 'db',

@@ -1,21 +1,10 @@
+import { injectable } from 'inversify';
+
 export type ObserverInterface = (data: any) => any;
 
+@injectable()
 class Subject {
-  private static _instance: Subject = new Subject();
-
   protected observers: ObserverInterface[] = [];
-
-  private constructor() {
-    if (Subject._instance) {
-      throw new Error('Already initialized');
-    }
-
-    Subject._instance = this;
-  }
-
-  public static get instance(): Subject {
-    return this._instance;
-  }
 
   public subscribe(fn: ObserverInterface) {
     const exists = this.observers.find(sub => sub === fn);

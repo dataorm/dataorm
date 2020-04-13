@@ -1,12 +1,11 @@
-import { Store } from '../Database/Store';
-import { container } from '../IoC/bindings';
-import { TYPES } from '../IoC/types';
 import { Subject } from '../Observer/Subject';
+import { Store } from './Store';
+import { container } from '../IoC/bindings';
 
 class Mutation {
-  private store: Store = container.get(TYPES.Store);
+  private store: Store = container.get<Store>('Store');
 
-  private subject = Subject.instance;
+  private subject: Subject = new Subject();
 
   public model: any;
 

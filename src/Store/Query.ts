@@ -1,9 +1,8 @@
-import { Store } from '../Database/Store';
+import { Store } from './Store';
 import { container } from '../IoC/bindings';
-import { TYPES } from '../IoC/types';
 
 class Query {
-  private store: Store = container.get(TYPES.Store);
+  private store: Store = container.get<Store>('Store');
 
   public model: any;
 
