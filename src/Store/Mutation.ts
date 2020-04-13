@@ -1,11 +1,13 @@
+import { injectable } from 'inversify';
+import { container } from '../IoC/container';
+import { TYPES } from '../IoC/types';
 import { Subject } from '../Observer/Subject';
 import { Store } from './Store';
-import { container } from '../IoC/bindings';
 
+@injectable()
 class Mutation {
-  private store: Store = container.get<Store>('Store');
-
-  private subject: Subject = new Subject();
+  private store: Store = container.get(TYPES.Store);
+  private subject: Subject = container.get(TYPES.Subject);
 
   public model: any;
 

@@ -1,8 +1,11 @@
+import { injectable } from 'inversify';
+import { TYPES } from '../IoC/types';
+import { container } from '../IoC/container';
 import { Store } from './Store';
-import { container } from '../IoC/bindings';
 
+@injectable()
 class Query {
-  private store: Store = container.get<Store>('Store');
+  private store: Store = container.get(TYPES.Store);
 
   public model: any;
 

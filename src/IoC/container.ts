@@ -1,45 +1,24 @@
-export class IocContainer {
-  private _dependencies: { [key: string]: Object } = {};
+import { Container } from 'inversify';
+import { Subject } from '../Observer/Subject';
+import { Store } from '../Store/Store';
+import { StoreConfig } from '../Store/StoreConfig';
+import { TYPES } from './types';
 
-  private static _instance: IocContainer = new IocContainer();
+var container = new Container();
 
-  public static get instance(): IocContainer {
-    return this._instance;
-  }
+container
+  .bind<Store>(TYPES.Store)
+  .to(Store)
+  .inSingletonScope();
 
-  private constructor() {
-    if (IocContainer._instance) {
-      throw new Error('Already Initialized');
-    }
+container
+  .bind<Subject>(TYPES.Subject)
+  .to(Subject)
+  .inSingletonScope();
 
-    IocContainer._instance = this;
-  }
+container
+  .bind<StoreConfig>(TYPES.StoreConfig)
+  .to(StoreConfig)
+  .inSingletonScope();
 
-  singleton(name: string, implementation: any, dependencies: string[]) {
-    if (this._dependencies[name]) {
-      throw new Error('Dependency already registered');
-    }
-
-    console.log(dependencies, implementation);
-
-    // let depImplementations = this.getDependenciesImplementations(dependencies);
-
-    this._dependencies[name] = new implementation();
-  }
-
-  resolve(name: string): any {
-    if (!this._dependencies[name]) {
-      throw new Error(`unresolved dependency ${name}`);
-    }
-
-    return this._dependencies[name];
-  }
-
-  run() {
-    console.log(this, 'hello');
-  }
-
-  // private getDependenciesImplementations(names: string[]): Object[] {
-  //   return names.map(name => this.resolve(name));
-  // }
-}
+export { container };
