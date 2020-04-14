@@ -2,6 +2,7 @@ import { injectable } from 'inversify';
 import { TYPES } from '../IoC/types';
 import { container } from '../IoC/container';
 import { Store } from './Store';
+import { QueryBuilder } from './QueryBuilder';
 
 @injectable()
 class Query {
@@ -9,16 +10,32 @@ class Query {
 
   public model: any;
 
-  public builder = {
-    or: [],
-    and: [],
-    in: [],
-  };
-
-  public load = [];
-
   constructor(model: any) {
     this.model = model;
+  }
+
+  public find() {
+    return this.store.state;
+  }
+
+  public first() {
+    //
+  }
+
+  public has() {
+    //
+  }
+
+  public doesntHave() {
+    //
+  }
+
+  public whereHas() {
+    //
+  }
+
+  public whereDoesntHave() {
+    //
   }
 
   public all() {
@@ -26,11 +43,11 @@ class Query {
   }
 
   public where() {
-    return new Query(this.model);
+    return new QueryBuilder(this.model);
   }
 
   public with() {
-    return new Query(this.model);
+    return new QueryBuilder(this.model);
   }
 }
 

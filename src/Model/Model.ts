@@ -69,23 +69,43 @@ class Model {
     return this.dispatchQuery.with();
   }
 
-  static findOrFail() {
+  public static first() {
+    return this.dispatchQuery.first();
+  }
+
+  public static has() {
+    return this.dispatchQuery.has();
+  }
+
+  public static doesntHave() {
+    return this.dispatchQuery.doesntHave();
+  }
+
+  public static whereHas() {
+    return this.dispatchQuery.whereHas();
+  }
+
+  public static whereDoesntHave() {
+    return this.dispatchQuery.whereDoesntHave();
+  }
+
+  public static findOrFail() {
     return this.dispatchQuery.with();
   }
 
-  static create(object: any) {
+  public static create(object: any) {
     return this.dispatchMutation.create(object);
   }
 
-  static createOrUpdate(object: any) {
+  public static createOrUpdate(object: any) {
     return this.dispatchMutation.create(object);
   }
 
-  static updateOrCreate(object: any) {
+  public static updateOrCreate(object: any) {
     return this.dispatchMutation.create(object);
   }
 
-  static destroy(object: any) {
+  public static destroy(object: any) {
     return this.dispatchMutation.create(object);
   }
 
@@ -111,7 +131,7 @@ class Model {
     }, {});
   }
 
-  toJson() {
+  public toJson() {
     const modelInstance = Object.assign(this);
 
     if (modelInstance === null) return null;
