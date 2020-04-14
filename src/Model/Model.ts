@@ -37,6 +37,10 @@ class Model {
     return new Mutation(this);
   }
 
+  static overwrite() {
+    return this.dispatchQuery.with();
+  }
+
   static with() {
     return this.dispatchQuery.with();
   }
