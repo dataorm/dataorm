@@ -2,13 +2,13 @@ import { container } from '../IoC/container';
 import { TYPES } from '../IoC/types';
 import { Mutation } from '../Store/Mutation';
 import { Query } from '../Store/Query';
-import { Store } from '../Store/Store';
+import { Database } from '../Store/Database';
 import { StringField } from '../Attributes/Fields/StringField';
 import { HasMany } from '../Attributes/Relations/HasMany';
 import { BelongsTo } from '../Attributes/Relations/BelongsTo';
 
 abstract class Model {
-  private store: Store = container.get(TYPES.Store);
+  private database: Database = container.get(TYPES.Database);
 
   protected static entity: string | null = null;
 
@@ -26,12 +26,12 @@ abstract class Model {
     return new StringField(this);
   }
 
-  public static hasMany() {
-    return new HasMany(this);
+  public static hasMany(related: any, foreignKey: string, localKey: string) {
+    return new HasMany(this, related, foreignKey, localKey);
   }
 
-  public static belongsTo() {
-    return new BelongsTo(this);
+  public static belongsTo(parent: any, foreignKey: string, ownerKey: string) {
+    return new BelongsTo(this, parent, foreignKey, ownerKey);
   }
 
   private static get dispatchQuery() {
@@ -119,7 +119,7 @@ abstract class Model {
   }
 
   protected get fields() {
-    const model = this.store.models.find(model => {
+    const model = this.database.models.find(model => {
       return this instanceof model.model === true;
     });
 

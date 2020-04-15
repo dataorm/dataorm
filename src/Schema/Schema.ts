@@ -1,5 +1,6 @@
 import { schema as Normalizr } from 'normalizr';
 import { Relations } from '../Attributes/Relations/Relations';
+import { IdAttribute } from './IdAttribute';
 
 export class Schema {
   public model: any;
@@ -21,7 +22,13 @@ export class Schema {
       return this.schemas[model.entity];
     }
 
-    const schema = new Normalizr.Entity(model.entity, {}, {});
+    const schema = new Normalizr.Entity(
+      model.entity,
+      {},
+      {
+        idAttribute: IdAttribute.create(model),
+      }
+    );
 
     this.schemas[model.entity] = schema;
     const definition = this.definition(model);

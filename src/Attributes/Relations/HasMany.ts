@@ -4,17 +4,19 @@ export class HasMany extends Relations {
   protected isNull = false;
   protected defaultValue: any;
 
-  constructor(model: any) {
+  public related: any;
+  public foreignKey: string;
+  public localKey: string;
+
+  constructor(model: any, related: any, foreignKey: string, localKey: string) {
     super(model);
-  }
 
-  make(model: any, relation: any, key: any) {
-    console.log(relation, key);
-
-    return new HasMany(model);
+    this.related = related;
+    this.foreignKey = foreignKey;
+    this.localKey = localKey;
   }
 
   define(schema: any) {
-    return schema.many(this.model);
+    return schema.many(this.related);
   }
 }

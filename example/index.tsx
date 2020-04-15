@@ -6,9 +6,7 @@ import { OrmProvider, Database } from 'dataorm';
 import { User } from './src/models/User';
 import { Post } from './src/models/Post';
 
-const database = new Database();
-const store = database
-  .config({ name: 'hello' })
+const database = new Database({ name: 'hello' })
   .add(User)
   .add(Post)
   .init();
@@ -16,7 +14,7 @@ const store = database
 console.log(database, 'database');
 
 ReactDOM.render(
-  <OrmProvider store={store}>
+  <OrmProvider database={database}>
     <App />
   </OrmProvider>,
   document.getElementById('root')

@@ -10,10 +10,31 @@ import { Schema } from '../Schema/Schema';
 
 @injectable()
 class Database {
-  private store: Store = container.get(TYPES.Store);
+  public store: Store = container.get(TYPES.Store);
+
+  public config: DBConfigOptions = {
+    name: 'db',
+    sync: null,
+  };
+
+  public initialized: any = false;
+
+  public models: any[] = [];
+
+  public schema: any = {};
+
+  public constructor(config: DBConfigOptions) {
+    if (this.initialized) {
+      throw new Error('Database already initialized');
+    }
+
+    this.config = this.generateConfig(config);
+
+    this.store.setState({ [this.config.name]: {} });
+  }
 
   private generateConfig(config: any) {
-    return Object.assign(this.store.config, config);
+    return Object.assign(this.config, config);
   }
 
   private checkModelTypeMappingCapabilities(model: any): any {
@@ -22,7 +43,7 @@ class Database {
     }
     if (
       model.entity &&
-      this.store.models.find((m: any) => m.entity === model.entity)
+      this.models.find((m: any) => m.entity === model.entity)
     ) {
       throw new Error(`Duplicate entity name for ${model.name}`);
     }
@@ -43,29 +64,27 @@ class Database {
   }
 
   public getState() {
-    return this.store.state[this.store.config.name];
+    return this.store.state[this.config.name];
   }
 
   private registerSchema(model: any): void {
-    this.store.schema[model.entity] = Schema.create(model.model);
+    this.schema[model.entity] = Schema.create(model);
   }
 
-  private createSchema() {
-    this.store.models.forEach((model: any): void => {
-      this.registerSchema(model);
+  private registerAttributes(model: any): void {
+    Object.defineProperty(model, 'cachedAttributes', {
+      value: Object.assign(model.fields(), model.relations()),
+      writable: true,
+      configurable: true,
+      enumerable: true,
     });
   }
 
-  public config(config: DBConfigOptions) {
-    if (this.store.init) {
-      throw new Error('Database already initialized');
-    }
-
-    this.store.config = this.generateConfig(config);
-
-    this.store.setState({ [this.store.config.name]: {} });
-
-    return this;
+  private createSchema() {
+    this.models.forEach((model: any): void => {
+      this.registerAttributes(model.model);
+      this.registerSchema(model.model);
+    });
   }
 
   public add(model: any) {
@@ -73,7 +92,7 @@ class Database {
 
     const entity = this.createModelBinding(model);
 
-    this.store.models.push(entity);
+    this.models.push(entity);
 
     return this;
   }
@@ -81,9 +100,9 @@ class Database {
   public init() {
     this.createSchema();
 
-    this.store.init = true;
+    this.initialized = true;
 
-    return this.store;
+    return this;
   }
 }
 

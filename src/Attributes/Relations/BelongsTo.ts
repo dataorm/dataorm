@@ -4,17 +4,19 @@ export class BelongsTo extends Relations {
   protected isNull = false;
   protected defaultValue: any;
 
-  constructor(model: any) {
+  public parent: any;
+  public foreignKey: string;
+  public ownerKey: string;
+
+  constructor(model: any, parent: any, foreignKey: string, ownerKey: string) {
     super(model);
-  }
 
-  make(model: any, relation: any, key: any) {
-    console.log(relation, key);
-
-    return new BelongsTo(model);
+    this.parent = parent;
+    this.foreignKey = foreignKey;
+    this.ownerKey = ownerKey;
   }
 
   define(schema: any) {
-    return schema.one(this.model);
+    return schema.one(this.parent);
   }
 }
