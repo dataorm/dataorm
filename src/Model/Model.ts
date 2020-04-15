@@ -10,9 +10,9 @@ import { BelongsTo } from '../Attributes/Relations/BelongsTo';
 abstract class Model {
   private database: Database = container.get(TYPES.Database);
 
-  protected static entity: string | null = null;
+  public static entity: string | null = null;
 
-  protected static primaryKey: string = 'id';
+  public static primaryKey: string = 'id';
 
   public static fields() {
     return {};

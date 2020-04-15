@@ -1,7 +1,7 @@
 import { Fields } from './Fields';
 
-export class StringField extends Fields {
-  protected value: string | null = null;
+export class NumberField extends Fields {
+  protected value: number | null = null;
   protected isNullable: boolean = false;
   protected isUnique: boolean = false;
 
@@ -21,9 +21,8 @@ export class StringField extends Fields {
     return this;
   }
 
-  public default(defaultValue: string | Date) {
-    this.value =
-      defaultValue instanceof Date ? defaultValue.toISOString() : defaultValue;
+  public default(defaultValue: number) {
+    this.value = defaultValue;
 
     return this;
   }

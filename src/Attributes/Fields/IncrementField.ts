@@ -9,5 +9,17 @@ export class IncrementField extends Fields {
     super(model);
   }
 
-  make() {}
+  make(data: any, key: string) {
+    this.validate(data, key);
+  }
+
+  validate(data: any, key: string) {
+    if (
+      key === this.model.primaryKey &&
+      data[key] &&
+      Math.sign(data[key]) !== 1
+    ) {
+      throw new Error('Primary key must be a positive number.');
+    }
+  }
 }
