@@ -1,6 +1,6 @@
 export const TYPES = {
   Store: 'Store',
-  StoreConfig: 'StoreConfig',
+  Database: 'Database',
   Subject: 'Subject',
   Query: 'Query',
   Mutation: 'Mutation',

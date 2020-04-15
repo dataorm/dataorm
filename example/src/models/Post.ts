@@ -1,8 +1,8 @@
 import { Model } from 'dataorm';
-import { Post } from './Post';
+import { User } from './User';
 
-class User extends Model {
-  public static entity = 'users';
+class Post extends Model {
+  public static entity = 'posts';
 
   public static primaryKey = 'id';
 
@@ -15,9 +15,9 @@ class User extends Model {
 
   public static relations() {
     return {
-      posts: this.hasMany(Post),
+      user: this.belongsTo(User),
     };
   }
 }
 
-export { User };
+export { Post };

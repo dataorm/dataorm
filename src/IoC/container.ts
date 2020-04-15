@@ -1,7 +1,7 @@
 import { Container } from 'inversify';
 import { Subject } from '../Observer/Subject';
 import { Store } from '../Store/Store';
-import { StoreConfig } from '../Store/StoreConfig';
+import { Database } from '../Store/Database';
 import { TYPES } from './types';
 import { QueryBuilder } from '../Store/QueryBuilder';
 import { Query } from '../Store/Query';
@@ -20,8 +20,8 @@ container
   .inSingletonScope();
 
 container
-  .bind<StoreConfig>(TYPES.StoreConfig)
-  .to(StoreConfig)
+  .bind<Database>(TYPES.Database)
+  .to(Database)
   .inSingletonScope();
 
 container

@@ -2,13 +2,13 @@ import { injectable } from 'inversify';
 import { container } from '../IoC/container';
 import { TYPES } from '../IoC/types';
 import { ObserverInterface, Subject } from '../Observer/Subject';
-import { StoreConfigOptions } from './types';
+import { DBConfigOptions } from './types';
 
 @injectable()
 class Store {
   private subject: Subject = container.get(TYPES.Subject);
 
-  public config: StoreConfigOptions = {
+  public config: DBConfigOptions = {
     name: 'db',
     sync: null,
   };
@@ -22,6 +22,8 @@ class Store {
   public init: any = false;
 
   public models: any[] = [];
+
+  public schema: any = {};
 
   public setState: (data: any) => any = (data: any) => {
     this._state = data;

@@ -2,6 +2,6 @@ import 'reflect-metadata';
 
 import { OrmProvider } from './OrmProvider';
 import { Model } from './Model/Model';
-import { StoreConfig } from './Store/StoreConfig';
+import { Database } from './Store/Database';
 
-export { OrmProvider, Model, StoreConfig };
+export { OrmProvider, Model, Database };

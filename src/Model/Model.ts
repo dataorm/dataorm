@@ -1,32 +1,37 @@
-import { Attributes } from '../Attributes/Attributes';
 import { container } from '../IoC/container';
 import { TYPES } from '../IoC/types';
-import { Relations } from '../Relations/Relations';
 import { Mutation } from '../Store/Mutation';
 import { Query } from '../Store/Query';
 import { Store } from '../Store/Store';
+import { StringField } from '../Attributes/Fields/StringField';
+import { HasMany } from '../Attributes/Relations/HasMany';
+import { BelongsTo } from '../Attributes/Relations/BelongsTo';
 
-class Model {
+abstract class Model {
   private store: Store = container.get(TYPES.Store);
 
   protected static entity: string | null = null;
 
   protected static primaryKey: string = 'id';
 
-  protected static get attributes() {
-    return new Attributes(this);
+  public static fields() {
+    return {};
   }
 
-  protected static get relations() {
-    return new Relations(this);
+  public static relations() {
+    return {};
   }
 
-  protected get fields() {
-    const model = this.store.models.find(model => {
-      return this instanceof model.model === true;
-    });
+  public static string() {
+    return new StringField(this);
+  }
 
-    return model.model.fields();
+  public static hasMany() {
+    return new HasMany(this);
+  }
+
+  public static belongsTo() {
+    return new BelongsTo(this);
   }
 
   private static get dispatchQuery() {
@@ -113,8 +118,12 @@ class Model {
     return this.dispatchMutation.create(object);
   }
 
-  public delete() {
-    console.log('delete record if exists');
+  protected get fields() {
+    const model = this.store.models.find(model => {
+      return this instanceof model.model === true;
+    });
+
+    return model.model.fields();
   }
 
   public fill(data: any) {
@@ -133,6 +142,10 @@ class Model {
     return Object.keys(this.fields).reduce((carry, item) => {
       return { ...carry, [item]: modelInstance[item] };
     }, {});
+  }
+
+  public delete() {
+    console.log('delete record if exists');
   }
 
   public toJson() {
