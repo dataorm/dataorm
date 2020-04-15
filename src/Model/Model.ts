@@ -22,6 +22,12 @@ abstract class Model {
     return {};
   }
 
+  public static getIndexIdFromRecord(record: any) {
+    const key = this.primaryKey;
+
+    return record[key] ? record[key] : null;
+  }
+
   public static string() {
     return new StringField(this);
   }
