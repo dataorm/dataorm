@@ -1,6 +1,6 @@
 import { Model } from '../Model/Model';
 
-export class Attributes {
+export abstract class Attributes {
   model: typeof Model;
 
   constructor(model: typeof Model) {

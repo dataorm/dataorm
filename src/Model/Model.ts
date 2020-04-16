@@ -1,16 +1,13 @@
-import { container } from '../IoC/container';
-import { TYPES } from '../IoC/types';
+import { Relations } from 'Attributes/Contracts/Relations';
+import { Fields } from '../Attributes/Contracts/Fields';
+import { StringField } from '../Attributes/Fields/StringField';
+import { BelongsTo } from '../Attributes/Relations/BelongsTo';
+import { HasMany } from '../Attributes/Relations/HasMany';
 import { Mutation } from '../Store/Mutation';
 import { Query } from '../Store/Query';
-import { Database } from '../Store/Database';
-import { StringField } from '../Attributes/Fields/StringField';
-import { HasMany } from '../Attributes/Relations/HasMany';
-import { BelongsTo } from '../Attributes/Relations/BelongsTo';
 
 abstract class Model {
-  private database: Database = container.get(TYPES.Database);
-
-  public static entity: string | null = null;
+  public static entity: string;
 
   public static primaryKey: string = 'id';
 
@@ -22,6 +19,14 @@ abstract class Model {
     }
 
     return record[key] ? JSON.stringify(record[key]) : null;
+  }
+
+  static fields(): Fields {
+    return {};
+  }
+
+  static relations(): Relations {
+    return {};
   }
 
   public static string() {
@@ -120,18 +125,16 @@ abstract class Model {
     return this.dispatchMutation.create(object);
   }
 
-  protected get fields() {
-    const model = this.database.models.find(model => {
-      return this instanceof model.model === true;
-    });
-
-    return model.model.fields();
+  public $self() {
+    return this.constructor as typeof Model;
   }
 
   public fill(data: any) {
     const modelInstance = Object.assign(this);
 
-    Object.keys(this.fields).forEach(key => {
+    const fields = this.$self().fields();
+
+    return Object.keys(fields).forEach((key: string) => {
       Object.defineProperty(modelInstance, 'email', {
         value: data[key],
       });
@@ -141,20 +144,25 @@ abstract class Model {
   public save() {
     const modelInstance = Object.assign(this);
 
-    return Object.keys(this.fields).reduce((carry, item) => {
+    const fields = this.$self().fields();
+
+    return Object.keys(fields).reduce((carry, item) => {
       return { ...carry, [item]: modelInstance[item] };
     }, {});
   }
 
   public delete() {
-    console.log('delete record if exists');
+    console.log('delete record if exists', this.$self().fields());
   }
 
   public toJson() {
     const modelInstance = Object.assign(this);
 
+    const fields = this.$self().fields();
+
     if (modelInstance === null) return null;
-    return Object.keys(this.fields).reduce((carry, item) => {
+
+    return Object.keys(fields).reduce((carry, item) => {
       return { ...carry, ...{ [item]: modelInstance[item] } };
     }, {});
   }

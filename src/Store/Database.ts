@@ -4,9 +4,12 @@ import Pluralize from 'pluralize';
 import { container } from '../IoC/container';
 import { TYPES } from '../IoC/types';
 import { Model } from '../Model/Model';
+import { Schema } from '../Schema/Schema';
+import { Entity } from './Contracts/Entity';
 import { Store } from './Store';
 import { DBConfigOptions } from './types';
-import { Schema } from '../Schema/Schema';
+
+export type Models = Record<string, typeof Model>;
 
 @injectable()
 class Database {
@@ -19,9 +22,21 @@ class Database {
 
   public initialized: any = false;
 
-  public models: any[] = [];
+  public entities: Entity[] = [];
 
   public schema: any = {};
+
+  models(): Models {
+    return this.entities.reduce<Models>((models, entity) => {
+      models[entity.name] = entity.model;
+      return models;
+    }, {});
+  }
+
+  model(model: typeof Model | string): typeof Model {
+    const name = typeof model === 'string' ? model : model.entity;
+    return this.models()[name];
+  }
 
   private generateConfig(config: any) {
     return Object.assign(this.config, config);
@@ -31,24 +46,25 @@ class Database {
     if (model.prototype instanceof Model === false) {
       throw new Error('Invalid Model Bindings');
     }
+
     if (
       model.entity &&
-      this.models.find((m: any) => m.entity === model.entity)
+      this.entities.find((m: any) => m.entity === model.entity)
     ) {
       throw new Error(`Duplicate entity name for ${model.name}`);
     }
   }
 
-  private createModelBinding(model: any): any {
-    const entity = model.entity ?? snakeCase(Pluralize.plural(model.name));
+  private createModelBinding(model: typeof Model): any {
+    const name = model.entity ?? snakeCase(Pluralize.plural(model.name));
 
     Object.defineProperties(model, {
-      entity: { value: entity },
+      entity: { value: name },
       store: { value: this.store },
     });
 
     return {
-      entity,
+      name,
       model,
     };
   }
@@ -71,9 +87,9 @@ class Database {
   }
 
   private createSchema() {
-    this.models.forEach((model: any): void => {
-      this.registerAttributes(model.model);
-      this.registerSchema(model.model);
+    this.entities.forEach((entity: Entity): void => {
+      this.registerAttributes(entity.model);
+      this.registerSchema(entity.model);
     });
   }
 
@@ -94,7 +110,7 @@ class Database {
 
     const entity = this.createModelBinding(model);
 
-    this.models.push(entity);
+    this.entities.push(entity);
 
     return this;
   }
