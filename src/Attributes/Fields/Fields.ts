@@ -4,4 +4,6 @@ export abstract class Fields extends Attributes {
   constructor(model: any) {
     super(model);
   }
+
+  abstract make(data: any, key: string): any;
 }

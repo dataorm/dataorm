@@ -12,15 +12,23 @@ export class UuidField extends Fields {
 
   make(data: any, key: string) {
     this.validate(data, key);
+
+    if (data[key]) {
+      return data[key];
+    }
+
+    return this.value;
   }
 
   validate(data: any, key: string) {
     if (
       key === this.model.primaryKey &&
       data[key] &&
-      Math.sign(data[key]) !== 1
+      !data[key].match(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      )
     ) {
-      throw new Error('Primary key must be a positive number.');
+      throw new Error('Primary key must be a valid UUID.');
     }
   }
 }

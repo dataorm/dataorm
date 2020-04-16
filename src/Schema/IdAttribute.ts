@@ -1,14 +1,17 @@
+import { Fields } from '../Attributes/Fields/Fields';
+import { UuidField } from '../Attributes/Fields/UuidField';
+
 export class IdAttribute {
   public static create(model: any) {
-    return (value: any, _parentValue: any, _key: any) => {
-      this.generateIds(value, model);
-      var indexId = this.generateIndexId(value, model);
+    return (record: any, _parentRecord: any, _key: any) => {
+      this.generateIds(record, model);
+      const indexId = this.generateIndexId(record, model);
       return indexId;
     };
   }
 
   private static generateIds(record: any, model: any) {
-    var keys =
+    const keys =
       model.primaryKey instanceof Array ? model.primaryKey : [model.primaryKey];
 
     keys.forEach(function(k: any) {
@@ -16,9 +19,12 @@ export class IdAttribute {
         return;
       }
 
-      var attr = model.getFields()[k];
+      const attr = model.fields()[k];
 
-      record[k] = attr.make();
+      record[k] =
+        attr instanceof Fields
+          ? attr.make(record, k)
+          : new UuidField(model).make(record, k);
     });
   }
 

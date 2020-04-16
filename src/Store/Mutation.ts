@@ -1,13 +1,12 @@
 import { injectable } from 'inversify';
 import { container } from '../IoC/container';
 import { TYPES } from '../IoC/types';
-import { Subject } from '../Observer/Subject';
-import { Store } from './Store';
+import { Database } from './Database';
+import { normalize } from 'normalizr';
 
 @injectable()
 class Mutation {
-  private store: Store = container.get(TYPES.Store);
-  private subject: Subject = container.get(TYPES.Subject);
+  private database: Database = container.get(TYPES.Database);
 
   public model: any;
 
@@ -16,16 +15,10 @@ class Mutation {
   }
 
   public create(object: any) {
-    const immutableStore = Object.assign(this.store.state);
+    const normalizerSchema = this.database.schema[this.model.entity];
+    const normalizedData = normalize(object, normalizerSchema);
 
-    const collection =
-      immutableStore[this.store.config.name][this.model.entity];
-
-    collection.push(object);
-
-    this.store.setState(immutableStore);
-
-    this.subject.fire(immutableStore);
+    console.log('normalizedData', normalizedData);
   }
 }
 

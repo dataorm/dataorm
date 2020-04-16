@@ -1,12 +1,15 @@
-import * as React from 'react';
 import 'react-app-polyfill/ie11';
-import * as ReactDOM from 'react-dom';
-import App from './src/App';
-import { OrmProvider, Database } from 'dataorm';
-import { User } from './src/models/User';
-import { Post } from './src/models/Post';
 
-const database = new Database({ name: 'hello' })
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+
+import App from './src/App';
+
+import { DB, OrmProvider } from 'dataorm';
+import { Post } from './src/models/Post';
+import { User } from './src/models/User';
+
+const database = DB.configure({ name: 'hello' })
   .add(User)
   .add(Post)
   .init();

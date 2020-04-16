@@ -15,7 +15,7 @@ class User extends Model {
 
   public static relations() {
     return {
-      posts: this.hasMany(Post),
+      posts: this.hasMany(Post, 'user_id', 'post_id'),
     };
   }
 }

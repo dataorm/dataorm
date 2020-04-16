@@ -14,18 +14,14 @@ abstract class Model {
 
   public static primaryKey: string = 'id';
 
-  public static fields() {
-    return {};
-  }
-
-  public static relations() {
-    return {};
-  }
-
   public static getIndexIdFromRecord(record: any) {
-    const key = this.primaryKey;
+    const key: any = this.primaryKey;
 
-    return record[key] ? record[key] : null;
+    if (key instanceof Array) {
+      return JSON.stringify(key.map(k => record[k]));
+    }
+
+    return record[key] ? JSON.stringify(record[key]) : null;
   }
 
   public static string() {

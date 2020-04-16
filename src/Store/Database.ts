@@ -23,16 +23,6 @@ class Database {
 
   public schema: any = {};
 
-  public constructor(config: DBConfigOptions) {
-    if (this.initialized) {
-      throw new Error('Database already initialized');
-    }
-
-    this.config = this.generateConfig(config);
-
-    this.store.setState({ [this.config.name]: {} });
-  }
-
   private generateConfig(config: any) {
     return Object.assign(this.config, config);
   }
@@ -85,6 +75,18 @@ class Database {
       this.registerAttributes(model.model);
       this.registerSchema(model.model);
     });
+  }
+
+  public configure(config: DBConfigOptions) {
+    if (this.initialized) {
+      throw new Error('Database already initialized');
+    }
+
+    this.config = this.generateConfig(config);
+
+    this.store.setState({ [this.config.name]: {} });
+
+    return this;
   }
 
   public add(model: any) {
