@@ -1,7 +1,7 @@
 import { Relations } from './Relations';
 import { Model } from '../../Model/Model';
 
-export class HasMany extends Relations {
+export class HasOne extends Relations {
   protected isNull = false;
   protected defaultValue: any;
 
@@ -15,9 +15,9 @@ export class HasMany extends Relations {
     foreignKey: string,
     localKey: string
   ) {
-    super(model);
+    super(model); /* istanbul ignore next */
 
-    this.related = related;
+    this.related = this.model.relation(related);
     this.foreignKey = foreignKey;
     this.localKey = localKey;
   }

@@ -2,14 +2,21 @@ import { Relations } from 'Attributes/Contracts/Relations';
 import { Fields } from '../Attributes/Contracts/Fields';
 import { StringField } from '../Attributes/Fields/StringField';
 import { BelongsTo } from '../Attributes/Relations/BelongsTo';
+import { BelongsToMany } from '../Attributes/Relations/BelongsToMany';
 import { HasMany } from '../Attributes/Relations/HasMany';
+import { HasOne } from '../Attributes/Relations/HasOne';
+import { container } from '../IoC/container';
+import { TYPES } from '../IoC/types';
+import { Database } from '../Store/Database';
 import { Mutation } from '../Store/Mutation';
 import { Query } from '../Store/Query';
 
 abstract class Model {
+  public static database: Database = container.get(TYPES.Database);
+
   public static entity: string;
 
-  public static primaryKey: string = 'id';
+  public static primaryKey: string | string[] = 'id';
 
   public static getIndexIdFromRecord(record: any) {
     const key: any = this.primaryKey;
@@ -29,16 +36,72 @@ abstract class Model {
     return {};
   }
 
+  static localKey(key?: string): string {
+    if (key) {
+      return key;
+    }
+
+    return typeof this.primaryKey === 'string' ? this.primaryKey : 'id';
+  }
+
+  static relation(model: typeof Model | string): typeof Model {
+    if (typeof model !== 'string') {
+      return model;
+    }
+
+    return this.database.model(model);
+  }
+
   public static string() {
     return new StringField(this);
   }
 
+  public static hasOne(related: any, foreignKey: string, localKey: string) {
+    return new HasOne(this, related, foreignKey, this.localKey(localKey));
+  }
+
   public static hasMany(related: any, foreignKey: string, localKey: string) {
-    return new HasMany(this, related, foreignKey, localKey);
+    return new HasMany(this, related, foreignKey, this.localKey(localKey));
   }
 
   public static belongsTo(parent: any, foreignKey: string, ownerKey: string) {
-    return new BelongsTo(this, parent, foreignKey, ownerKey);
+    return new BelongsTo(
+      this,
+      parent,
+      foreignKey,
+      this.relation(parent).localKey(ownerKey)
+    );
+  }
+
+  static belongsToMany(
+    related: typeof Model,
+    pivot: typeof Model,
+    foreignPivotKey: string,
+    relatedPivotKey: string,
+    parentKey?: string,
+    relatedKey?: string
+  ) {
+    return new BelongsToMany(
+      this,
+      related,
+      pivot,
+      foreignPivotKey,
+      relatedPivotKey,
+      this.localKey(parentKey),
+      this.relation(related).localKey(relatedKey)
+    );
+  }
+
+  static isPrimaryKey(key: string): boolean {
+    if (this.primaryKey instanceof Array === false) {
+      return this.primaryKey === key;
+    }
+
+    return this.primaryKey.includes(key);
+  }
+
+  static isCompositePrimaryKey(): boolean {
+    return this.primaryKey instanceof Array === false;
   }
 
   private static get dispatchQuery() {

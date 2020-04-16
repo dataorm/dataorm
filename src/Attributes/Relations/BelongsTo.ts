@@ -1,4 +1,5 @@
 import { Relations } from './Relations';
+import { Model } from '../../Model/Model';
 
 export class BelongsTo extends Relations {
   protected isNull = false;
@@ -8,7 +9,12 @@ export class BelongsTo extends Relations {
   public foreignKey: string;
   public ownerKey: string;
 
-  constructor(model: any, parent: any, foreignKey: string, ownerKey: string) {
+  constructor(
+    model: typeof Model,
+    parent: typeof Model,
+    foreignKey: string,
+    ownerKey: string
+  ) {
     super(model);
 
     this.parent = parent;
