@@ -40,7 +40,7 @@ class Mutation {
 
         collections[entity] = collection;
 
-        collections['testing'] = 'test';
+        collections['testing'] = {};
 
         return collections;
       },

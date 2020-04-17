@@ -59,6 +59,8 @@ abstract class Model {
   }
 
   static prepare(record: any) {
+    console.log(record, 'record');
+
     const pkName: any = this.localKey();
     const pkValue: any = this.getIndexIdFromRecord(record);
 
@@ -69,9 +71,9 @@ abstract class Model {
       if (item !== pkName) {
         const field = fields[item];
         carry[item] = field.make(record[item], item);
-
-        return carry;
       }
+
+      return carry;
     }, object);
   }
 
