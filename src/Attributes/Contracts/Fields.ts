@@ -1,5 +1,5 @@
-import { Attributes } from '../Attributes';
+import { Fields } from '../Fields/Fields';
 
-export interface Fields {
-  [key: string]: Attributes;
+export interface FieldsType {
+  [key: string]: Fields;
 }

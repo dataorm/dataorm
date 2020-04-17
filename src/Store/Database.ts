@@ -73,11 +73,14 @@ class Database {
     return this.store.state[this.config.name];
   }
 
-  private registerSchema(model: any): void {
-    this.schema[model.entity] = Schema.create(model);
+  private registerCollection(model: typeof Model) {
+    const rootState = this.getState();
+    rootState[model.entity] = {};
+
+    this.store.setState({ [this.config.name]: rootState });
   }
 
-  private registerAttributes(model: any): void {
+  private registerAttributes(model: typeof Model): void {
     Object.defineProperty(model, 'cachedAttributes', {
       value: Object.assign(model.fields(), model.relations()),
       writable: true,
@@ -86,8 +89,13 @@ class Database {
     });
   }
 
+  private registerSchema(model: any): void {
+    this.schema[model.entity] = Schema.create(model);
+  }
+
   private createSchema() {
     this.entities.forEach((entity: Entity): void => {
+      this.registerCollection(entity.model);
       this.registerAttributes(entity.model);
       this.registerSchema(entity.model);
     });

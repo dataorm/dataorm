@@ -1,6 +1,12 @@
-import { Relations } from 'Attributes/Contracts/Relations';
-import { Fields } from '../Attributes/Contracts/Fields';
+import { RelationsType } from 'Attributes/Contracts/Relations';
+import { FieldsType } from '../Attributes/Contracts/Fields';
+import { BooleanField } from '../Attributes/Fields/BooleanField';
+import { DatetimeField } from '../Attributes/Fields/DatetimeField';
+import { IncrementField } from '../Attributes/Fields/IncrementField';
+import { JsonField } from '../Attributes/Fields/JsonField';
+import { NumberField } from '../Attributes/Fields/NumberField';
 import { StringField } from '../Attributes/Fields/StringField';
+import { UuidField } from '../Attributes/Fields/UuidField';
 import { BelongsTo } from '../Attributes/Relations/BelongsTo';
 import { BelongsToMany } from '../Attributes/Relations/BelongsToMany';
 import { HasMany } from '../Attributes/Relations/HasMany';
@@ -19,20 +25,20 @@ abstract class Model {
   public static primaryKey: string | string[] = 'id';
 
   public static getIndexIdFromRecord(record: any) {
-    const key: any = this.primaryKey;
+    const key: any = this.localKey();
 
     if (key instanceof Array) {
       return JSON.stringify(key.map(k => record[k]));
     }
 
-    return record[key] ? JSON.stringify(record[key]) : null;
+    return record[key] ? record[key] : null;
   }
 
-  static fields(): Fields {
+  static fields(): FieldsType {
     return {};
   }
 
-  static relations(): Relations {
+  static relations(): RelationsType {
     return {};
   }
 
@@ -52,8 +58,49 @@ abstract class Model {
     return this.database.model(model);
   }
 
+  static prepare(record: any) {
+    const pkName: any = this.localKey();
+    const pkValue: any = this.getIndexIdFromRecord(record);
+
+    const object = { [pkName]: pkValue, $id: record.$id };
+    const fields = this.fields();
+
+    return Object.keys(fields).reduce((carry: any, item: string) => {
+      if (item !== pkName) {
+        const field = fields[item];
+        carry[item] = field.make(record[item], item);
+
+        return carry;
+      }
+    }, object);
+  }
+
   public static string() {
     return new StringField(this);
+  }
+
+  public static number() {
+    return new NumberField(this);
+  }
+
+  public static boolean() {
+    return new BooleanField(this);
+  }
+
+  public static datetime() {
+    return new DatetimeField(this);
+  }
+
+  public static increment() {
+    return new IncrementField(this);
+  }
+
+  public static json() {
+    return new JsonField(this);
+  }
+
+  public static uuid() {
+    return new UuidField(this);
   }
 
   public static hasOne(related: any, foreignKey: string, localKey: string) {

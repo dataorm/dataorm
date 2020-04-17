@@ -1,5 +1,5 @@
-import { Attributes } from '../Attributes';
+import { Relations } from '../Relations/Relations';
 
-export interface Relations {
-  [key: string]: Attributes;
+export interface RelationsType {
+  [key: string]: Relations;
 }

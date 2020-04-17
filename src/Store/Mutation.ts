@@ -23,7 +23,32 @@ class Mutation {
 
     const normalizedData = normalize(object, schema);
 
-    console.log('normalizedData', normalizedData);
+    console.log(normalizedData, 'normalizedData');
+
+    const entities = Object.entries(normalizedData.entities).reduce(
+      (collections: any, [entity, record]: any) => {
+        const model = this.database.model(entity);
+
+        const collection = Object.entries(record).reduce(
+          (data: any, [entity, record]: any) => {
+            data[entity] = model.prepare(record);
+
+            return data;
+          },
+          {}
+        );
+
+        collections[entity] = collection;
+
+        collections['testing'] = 'test';
+
+        return collections;
+      },
+      {}
+    );
+
+    this.database.store.setState({ hello: entities });
+    console.log('entities', entities);
   }
 }
 

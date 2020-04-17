@@ -30,10 +30,12 @@ export class StringField extends Fields {
 
   make(data: any, key: string) {
     this.validate(data, key);
+
+    return data ? data : this.value;
   }
 
   validate(data: any, key: string) {
-    if (!this.isNullable && !data[key]) {
+    if (!this.isNullable && !this.value && !data) {
       throw new Error(`${key} can not be null.`);
     }
   }

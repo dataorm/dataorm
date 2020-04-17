@@ -1,23 +1,24 @@
 import { Model } from 'dataorm';
 import { User } from './User';
+import { RoleUser } from './RoleUser';
 
-class Post extends Model {
-  public static entity = 'posts';
+class Role extends Model {
+  public static entity = 'roles';
 
   public static primaryKey = 'id';
 
   public static fields() {
     return {
       id: this.increment(),
-      title: this.string(),
+      name: this.string(),
     };
   }
 
   public static relations() {
     return {
-      user: this.belongsTo(User, 'post_id', 'user_id'),
+      users: this.belongsToMany(User, RoleUser, 'role_id', 'user_id'),
     };
   }
 }
 
-export { Post };
+export { Role };

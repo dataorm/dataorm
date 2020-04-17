@@ -3,7 +3,7 @@ import { User } from './models/User';
 
 export function Home() {
   const [name, setName] = React.useState('');
-  const nameRef = React.useRef('');
+  const nameRef = React.useRef<any>('');
   const users = User.all();
 
   return (
@@ -15,11 +15,9 @@ export function Home() {
           e.preventDefault();
           User.create([
             {
-              id: 1,
-              name,
-              posts: [
-                { id: 1, user_id: 1, title: 'test', description: 'yahoo' },
-              ],
+              name: 'test',
+              age: 20,
+              posts: [{ title: 'test', description: 'yahoo' }],
             },
           ]);
           setName('');
