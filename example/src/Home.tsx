@@ -15,9 +15,13 @@ export function Home() {
           e.preventDefault();
           User.create([
             {
+              id: 1,
               name: 'test',
-              age: 20,
-              posts: [{ title: 'test', description: 'yahoo' }],
+              posts: [{ id: 1, title: 'hello' }],
+              roles: [
+                { id: 1, name: 'admin' },
+                { id: 2, name: 'designer' },
+              ],
             },
           ]);
           setName('');

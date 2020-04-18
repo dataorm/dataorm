@@ -59,8 +59,6 @@ abstract class Model {
   }
 
   static prepare(record: any) {
-    console.log(record, 'record');
-
     const pkName: any = this.localKey();
     const pkValue: any = this.getIndexIdFromRecord(record);
 

@@ -32,6 +32,6 @@ export class BelongsToMany extends Relations {
   }
 
   define(schema: any) {
-    return schema.one(this.related);
+    return schema.many(this.related);
   }
 }

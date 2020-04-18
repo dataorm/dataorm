@@ -15,15 +15,15 @@ class Mutation {
     this.model = model;
   }
 
-  public create(object: any) {
+  public create(data: object | object[]) {
     const normalizerSchema = this.database.schema[this.model.entity];
 
     const schema =
-      object instanceof Array ? [normalizerSchema] : normalizerSchema;
+      data instanceof Array ? [normalizerSchema] : normalizerSchema;
 
-    const normalizedData = normalize(object, schema);
+    const normalizedData = normalize(data, schema);
 
-    console.log(normalizedData, 'normalizedData');
+    console.log(data, 'data');
 
     const entities = Object.entries(normalizedData.entities).reduce(
       (collections: any, [entity, record]: any) => {

@@ -1,21 +1,22 @@
 import { schema as Normalizr } from 'normalizr';
 import { Relations } from '../Attributes/Relations/Relations';
 import { IdAttribute } from './IdAttribute';
+import { Model } from '../Model/Model';
 
 export class Schema {
-  public model: any;
+  public model: typeof Model;
   public schemas: { [key: string]: any };
 
-  constructor(model: any) {
+  constructor(model: typeof Model) {
     this.model = model;
     this.schemas = {};
   }
 
-  public static create(model: any) {
+  public static create(model: typeof Model) {
     return new this(model).one();
   }
 
-  public one(model?: any) {
+  public one(model?: typeof Model) {
     model = model || this.model;
 
     if (this.schemas[model.entity]) {
@@ -41,7 +42,7 @@ export class Schema {
     return new Normalizr.Array(this.one(model));
   }
 
-  private definition(model: any) {
+  private definition(model: typeof Model) {
     const fields = model.relations();
 
     return Object.keys(fields).reduce((carry: any, item: string) => {

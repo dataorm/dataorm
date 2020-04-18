@@ -13,12 +13,6 @@ class RoleUser extends Model {
       user_id: this.number(),
     };
   }
-
-  public static relations() {
-    return {
-      users: this.belongsToMany(User, RoleUser, 'role_id', 'post_id'),
-    };
-  }
 }
 
 export { RoleUser };
